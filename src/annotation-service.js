@@ -1,7 +1,7 @@
 import React from 'react';
 import { GeneSelectionForm } from './gene-selection';
 import { AnnotationSelection } from './annotation-selection'
-import { Divider, Button, Row, Icon } from 'antd'
+import { Divider, Button, Row, Icon, message } from 'antd'
 
 const availableAnnotations = [
     'Gene Ontology',
@@ -40,17 +40,22 @@ export class AnnotationService extends React.Component {
     handleGeneRemoved(gene) {
         this.setState(state => {
             let genes = state.genes.slice(0);
-            genes = genes.filter(g => g !== gene);
-            return { genes: genes }
+            return { genes: genes.filter(g => g !== gene) }
         })
     }
+
 
     handleGeneListUploaded(geneList) {
         const fileReader = new FileReader();
         fileReader.readAsText(geneList);
         fileReader.onload = () => {
-            // TODO: check the file doesn't contain invalid characters        
-            let geneArray = fileReader.result.split('\n')
+            // The file is supposed to contain one gene per line. Furthermore, gene names are supposed to contain alphanumeric characters only
+            const re = /^[a-z0-9\s]+$/i;
+            if (!re.test(fileReader.result)) {
+                message.error("The selected file contains invalid characters.");
+                return;
+            }
+            const geneArray = fileReader.result.split('\n')
             const uniqueGeneArray = geneArray.reduce((accumulator, value) => {
                 if (value && accumulator.indexOf(value) === -1) accumulator.push(value);
                 return accumulator;
@@ -58,6 +63,7 @@ export class AnnotationService extends React.Component {
             this.setState({ geneList: geneList, genes: uniqueGeneArray })
         };
     }
+
 
     handleAllGenesRemoved() {
         this.setState({ genes: [], geneList: null })
@@ -74,9 +80,10 @@ export class AnnotationService extends React.Component {
         })
     }
 
+
     handleAnnotationFilterChanged(annotation, e) {
         this.setState(state => {
-            let selectedAnnotations = state.selectedAnnotations.slice();
+            const selectedAnnotations = state.selectedAnnotations.slice();
             let targetAnnotation = selectedAnnotations.find(a => a.name === annotation);
             targetAnnotation.filter[e.target.name] = e.target.value;
 
@@ -84,13 +91,16 @@ export class AnnotationService extends React.Component {
         })
     }
 
+
     isFormValid() {
         return this.state.selectedAnnotations.length && this.state.genes.length
     }
 
+
     componentDidUpdate() {
-        console.log('State ', this.state)
+        console.log('State ', JSON.stringify(this.state, null, 2))
     }
+
 
     render() {
         return (<React.Fragment>
@@ -111,7 +121,7 @@ export class AnnotationService extends React.Component {
             />
             <Divider dashed />
             <Row type='flex' justify='end'>
-                <Button type='primary' disabled={!this.isFormValid()}>
+                <Button type='primary' disabled={!this.isFormValid()} >
                     <Icon type='check' />
                     Submit
                 </Button>
