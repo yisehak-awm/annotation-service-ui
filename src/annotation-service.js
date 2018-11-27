@@ -121,7 +121,7 @@ export class AnnotationService extends React.Component {
             />
             <Divider dashed />
             <Row type='flex' justify='end'>
-                <Button type='primary' disabled={!this.isFormValid()} >
+                <Button id="submit" type='primary' disabled={!this.isFormValid()} >
                     <Icon type='check' />
                     Submit
                 </Button>

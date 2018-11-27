@@ -1,0 +1,368 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AnnotationService /> renders correctly 1`] = `
+Array [
+  <form
+    className="ant-form ant-form-horizontal"
+    onSubmit={[Function]}
+  >
+    <div
+      className="ant-row ant-form-item"
+    >
+      <div
+        className="ant-form-item-control-wrapper"
+      >
+        <div
+          className="ant-form-item-control"
+        >
+          <span
+            className="ant-form-item-children"
+          >
+            <div
+              className="ant-radio-group ant-radio-group-outline"
+              id="inputMethod"
+            >
+              <label
+                className="ant-radio-wrapper ant-radio-wrapper-checked"
+              >
+                <span
+                  className="ant-radio ant-radio-checked"
+                  style={Object {}}
+                >
+                  <input
+                    checked={true}
+                    className="ant-radio-input"
+                    disabled={false}
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    type="radio"
+                    value={1}
+                  />
+                  <span
+                    className="ant-radio-inner"
+                  />
+                </span>
+                <span>
+                  Input directly
+                </span>
+              </label>
+              <label
+                className="ant-radio-wrapper"
+              >
+                <span
+                  className="ant-radio"
+                  style={Object {}}
+                >
+                  <input
+                    checked={false}
+                    className="ant-radio-input"
+                    disabled={false}
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    type="radio"
+                    value={2}
+                  />
+                  <span
+                    className="ant-radio-inner"
+                  />
+                </span>
+                <span>
+                  Import from file
+                </span>
+              </label>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>,
+  <form
+    className="ant-form ant-form-horizontal"
+    id="directInputForm"
+    onSubmit={[Function]}
+  >
+    <div
+      className="ant-row ant-form-item"
+      style={
+        Object {
+          "marginBottom": "0",
+        }
+      }
+    >
+      <div
+        className="ant-form-item-label"
+      >
+        <label
+          className="ant-form-item-required"
+          htmlFor="gene"
+          onClick={[Function]}
+          title="Gene name"
+        >
+          Gene name
+        </label>
+      </div>
+      <div
+        className="ant-form-item-control-wrapper"
+      >
+        <div
+          className="ant-form-item-control"
+        >
+          <span
+            className="ant-form-item-children"
+          >
+            <span
+              className="ant-input-affix-wrapper"
+            >
+              <input
+                className="ant-input"
+                data-__field={
+                  Object {
+                    "name": "gene",
+                  }
+                }
+                data-__meta={
+                  Object {
+                    "name": "gene",
+                    "originalProps": Object {
+                      "disabled": false,
+                      "onChange": [Function],
+                      "onPressEnter": [Function],
+                      "placeholder": "Input gene name and hit enter",
+                      "prefixCls": "ant-input",
+                      "suffix": <Icon
+                        type="enter"
+                      />,
+                      "type": "text",
+                    },
+                    "ref": null,
+                    "rules": Array [
+                      Object {
+                        "message": "Please input gene name!",
+                        "required": true,
+                      },
+                      Object {
+                        "validator": [Function],
+                      },
+                    ],
+                    "trigger": "onChange",
+                    "validate": Array [
+                      Object {
+                        "rules": Array [
+                          Object {
+                            "message": "Please input gene name!",
+                            "required": true,
+                          },
+                          Object {
+                            "validator": [Function],
+                          },
+                        ],
+                        "trigger": Array [
+                          "onChange",
+                        ],
+                      },
+                    ],
+                    "valuePropName": "value",
+                  }
+                }
+                disabled={false}
+                id="gene"
+                onChange={[Function]}
+                onKeyDown={[Function]}
+                placeholder="Input gene name and hit enter"
+                style={null}
+                type="text"
+                value=""
+              />
+              <span
+                className="ant-input-suffix"
+              >
+                <i
+                  className="anticon anticon-enter"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className=""
+                    data-icon="enter"
+                    fill="currentColor"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M864 170h-60c-4.4 0-8 3.6-8 8v518H310v-73c0-6.7-7.8-10.5-13-6.3l-141.9 112a8 8 0 0 0 0 12.6l141.9 112c5.3 4.2 13 .4 13-6.3v-75h498c35.3 0 64-28.7 64-64V178c0-4.4-3.6-8-8-8z"
+                    />
+                  </svg>
+                </i>
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>,
+  <div
+    style={
+      Object {
+        "marginTop": "10px",
+      }
+    }
+  >
+    <h4
+      style={
+        Object {
+          "color": "#82909d",
+          "marginBottom": "5px",
+        }
+      }
+    >
+       Selected genes
+    </h4>
+    <div
+      className="ant-alert ant-alert-warning ant-alert-with-description ant-alert-no-icon"
+      data-show={true}
+    >
+      <span
+        className="ant-alert-message"
+      />
+      <span
+        className="ant-alert-description"
+      >
+        The genes you input appear here. You may input gene names directly or import them from file.
+      </span>
+    </div>
+  </div>,
+  <div
+    className="ant-divider ant-divider-horizontal ant-divider-dashed"
+  />,
+  <h4
+    style={
+      Object {
+        "marginBottom": "15px",
+      }
+    }
+  >
+    Annotations: 
+  </h4>,
+  <div>
+    <label
+      className="ant-checkbox-wrapper"
+    >
+      <span
+        className="ant-checkbox"
+        style={Object {}}
+      >
+        <input
+          checked={false}
+          className="ant-checkbox-input"
+          name="Gene Ontology"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ant-checkbox-inner"
+        />
+      </span>
+      <span>
+         
+        Gene Ontology
+         
+      </span>
+    </label>
+  </div>,
+  <div>
+    <label
+      className="ant-checkbox-wrapper"
+    >
+      <span
+        className="ant-checkbox"
+        style={Object {}}
+      >
+        <input
+          checked={false}
+          className="ant-checkbox-input"
+          name="Reactome"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ant-checkbox-inner"
+        />
+      </span>
+      <span>
+         
+        Reactome
+         
+      </span>
+    </label>
+  </div>,
+  <div>
+    <label
+      className="ant-checkbox-wrapper"
+    >
+      <span
+        className="ant-checkbox"
+        style={Object {}}
+      >
+        <input
+          checked={false}
+          className="ant-checkbox-input"
+          name="Small Molecules"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ant-checkbox-inner"
+        />
+      </span>
+      <span>
+         
+        Small Molecules
+         
+      </span>
+    </label>
+  </div>,
+  <div
+    className="ant-divider ant-divider-horizontal ant-divider-dashed"
+  />,
+  <div
+    className="ant-row-flex ant-row-flex-end"
+  >
+    <button
+      className="ant-btn ant-btn-primary"
+      disabled={true}
+      id="submit"
+      onClick={[Function]}
+      type="button"
+    >
+      <i
+        className="anticon anticon-check"
+      >
+        <svg
+          aria-hidden="true"
+          className=""
+          data-icon="check"
+          fill="currentColor"
+          height="1em"
+          viewBox="64 64 896 896"
+          width="1em"
+        >
+          <path
+            d="M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 0 0-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z"
+          />
+        </svg>
+      </i>
+      <span>
+        Submit
+      </span>
+    </button>
+  </div>,
+]
+`;

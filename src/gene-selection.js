@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Input, Upload, Icon, Tag, Alert, Radio , Button} from 'antd';
+import { Form, Input, Upload, Icon, Tag, Alert, Radio, Button } from 'antd';
 
-const InputMethods = {
+export const InputMethods = {
     DIRECT_INPUT: 1,
     FILE_UPLOAD: 2
 }
@@ -41,6 +41,7 @@ export class GeneSelection extends React.Component {
                 <Form>
                     <Form.Item>
                         <Radio.Group
+                            id="inputMethod"
                             onChange={e => this.setState({ inputMethod: e.target.value })}
                             value={this.state.inputMethod}>
 
@@ -53,7 +54,7 @@ export class GeneSelection extends React.Component {
 
 
                 {this.state.inputMethod === InputMethods.DIRECT_INPUT &&
-                    <Form>
+                    <Form id="directInputForm">
                         <Form.Item label="Gene name" style={{ marginBottom: '0' }}>
                             {getFieldDecorator("gene", {
                                 rules: [
@@ -93,7 +94,7 @@ export class GeneSelection extends React.Component {
                                 Please make sure the file is a plain text file containing one gene per line.
                                 </p>
                         </Upload.Dragger>
-                    
+
                         {this.props.geneList && this.props.genes.length ? (
                             <Alert className="fileDetails"
                                 style={{ borderRadius: 0, borderTop: "none", position: 'relative', bottom: '2px' }}
@@ -102,19 +103,19 @@ export class GeneSelection extends React.Component {
                             />
                         ) : null}
                     </React.Fragment>
-                    
+
                 }
 
                 <div style={{ marginTop: '10px' }}>
-                    <h4 style={{ color: '#82909d', marginBottom: '5px' }}> Selected genes  
-                         { this.props.genes.length ?
+                    <h4 style={{ color: '#82909d', marginBottom: '5px' }}> Selected genes
+                         {this.props.genes.length ?
                             <Button onClick={e => this.props.onAllGenesRemoved()} type="danger" ghost style={{ border: 'none' }}> Remove all</Button>
                             : null
                         }
                     </h4>
                     {
                         !this.props.genes.length ?
-                            <Alert type="warning" description="The genes you input appear here. You may input gene names directly or import them from file." /> : null
+                            <Alert id="noGenesAlert" type="warning" description="The genes you input appear here. You may input gene names directly or import them from file." /> : null
                     }
 
                     {
