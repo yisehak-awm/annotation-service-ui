@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/google-protobuf": "^3.2.7",
+    "antd": "^3.10.4",
+    "cytoscape": "^3.3.0",
+    "cytoscape-cola": "^2.3.0",
+    "google-protobuf": "^3.6.1",
+    "grpc-web": "^1.0.3",
+    "grpc-web-client": "^0.7.0",
+    "jquery": "^3.3.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1",
-    "antd": "^3.10.4"
+    "react-scripts": "2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,6 +31,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@grpc-gen/protoc-gen-grpc-web": "^0.4.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "jest": "^23.6.0",
