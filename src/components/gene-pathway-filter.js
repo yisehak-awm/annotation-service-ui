@@ -4,8 +4,7 @@ import FormItem from "antd/lib/form/FormItem";
 
 const options = [
   { label: "SMPDB", value: "SMPDB" },
-  { label: "Reactome", value: "Reactome" },
-  { label: "Chebi", value: "Chebi" }
+  { label: "Reactome", value: "Reactome" }
 ];
 
 export class GenePathwayFilter extends React.Component {
@@ -13,19 +12,34 @@ export class GenePathwayFilter extends React.Component {
     return (
       <React.Fragment>
         <Form layout="inline">
-          <FormItem label="Namespace">
-            <Checkbox.Group options={options} defaultValue={["SMPDB"]} />
+          <FormItem label="Pathway">
+            <Checkbox.Group
+              options={options}
+              defaultValue={this.props.defaults.namespace}
+            />
           </FormItem>
 
           <Row gutter={16}>
             <Col md={12} lg={8} xl={6}>
               <FormItem>
-                <Switch /> Small molecules
+                <Switch
+                  onChange={e => {
+                    this.props.handleFilterChanged({
+                      include_small_molecule: e
+                    });
+                  }}
+                />{" "}
+                Small molecules
               </FormItem>
             </Col>
             <Col md={12} lg={8} xl={6}>
               <FormItem>
-                <Switch /> Proteins
+                <Switch
+                  onChange={e => {
+                    this.props.handleFilterChanged({ include_prot: e });
+                  }}
+                />{" "}
+                Proteins
               </FormItem>
             </Col>
           </Row>

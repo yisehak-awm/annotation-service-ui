@@ -2,70 +2,33 @@
 
 exports[`<AnnotationSelection /> renders correctly 1`] = `
 Array [
-  <h4
-    style={
-      Object {
-        "marginBottom": "15px",
-      }
-    }
-  >
+  <h4>
     Annotations: 
   </h4>,
-  <div>
-    <label
-      className="ant-checkbox-wrapper"
+  <label
+    className="ant-checkbox-wrapper"
+  >
+    <span
+      className="ant-checkbox"
+      style={Object {}}
     >
+      <input
+        checked={false}
+        className="ant-checkbox-input"
+        name="GO"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="checkbox"
+      />
       <span
-        className="ant-checkbox"
-        style={Object {}}
-      >
-        <input
-          checked={false}
-          className="ant-checkbox-input"
-          name="a"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          type="checkbox"
-        />
-        <span
-          className="ant-checkbox-inner"
-        />
-      </span>
-      <span>
-         
-        a
-         
-      </span>
-    </label>
-  </div>,
-  <div>
-    <label
-      className="ant-checkbox-wrapper"
-    >
-      <span
-        className="ant-checkbox"
-        style={Object {}}
-      >
-        <input
-          checked={false}
-          className="ant-checkbox-input"
-          name="b"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          type="checkbox"
-        />
-        <span
-          className="ant-checkbox-inner"
-        />
-      </span>
-      <span>
-         
-        b
-         
-      </span>
-    </label>
-  </div>,
+        className="ant-checkbox-inner"
+      />
+    </span>
+    <span>
+      Gene-GO
+    </span>
+  </label>,
+  <br />,
 ]
 `;

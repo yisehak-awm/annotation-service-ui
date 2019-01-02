@@ -1,16 +1,22 @@
-import React from "react";
-import { GeneSelectionForm } from "./gene-selection";
-import { AnnotationSelection } from "./annotation-selection";
-import { Divider, Button, Row, Icon, message } from "antd";
-import * as result from "../graph.json";
-import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
-import { AnnotationResultDownload } from "./annotation-result-download";
 import {
   MAXIMUM_GRAPH_SIZE,
   MINIMAL_MODE_THRESHOLD
 } from "../visualizer.config";
-import { GOFilter } from "./go-filter";
-import { GenePathwayFilter } from "./gene-pathway-filter";
+import { SERVER_ADDRESS } from "../utils";
+import React from "react";
+import { Annotate } from "../proto/annotation_pb_service";
+import {
+  AnnotationRequest,
+  Annotation,
+  Gene,
+  Filter
+} from "../proto/annotation_pb";
+import { grpc } from "grpc-web-client";
+import { GeneSelectionForm } from "./gene-selection";
+import { AnnotationSelection } from "./annotation-selection";
+import { Divider, Button, Row, Icon, message } from "antd";
+import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
+import { AnnotationResultDownload } from "./annotation-result-download";
 
 export class AnnotationService extends React.Component {
   constructor(props) {
@@ -20,38 +26,7 @@ export class AnnotationService extends React.Component {
       geneList: null,
       selectedAnnotations: [],
       annotationResult: null,
-      availableAnnotations: [
-        {
-          name: "Gene-GO",
-          key: "GO",
-          defaults: {
-            numberOfParents: 0
-          },
-          filter: (
-            <GOFilter
-              handleFilterChanged={filter =>
-                this.handleFilterChanged("GO", filter)
-              }
-            />
-          )
-        },
-        {
-          name: "Gene Pathway",
-          key: "genePathway",
-          defaults: {},
-          filter: (
-            <GenePathwayFilter
-              handleFilterChanged={filter =>
-                this.handleFilterChanged("genePathway", filter)
-              }
-            />
-          )
-        },
-        {
-          name: "Biogrid protein interaction",
-          key: "biogridProtienInteraction"
-        }
-      ]
+      busy: false
     };
     // bind functions
     this.handleGeneAdded = this.handleGeneAdded.bind(this);
@@ -81,7 +56,6 @@ export class AnnotationService extends React.Component {
     const fileReader = new FileReader();
     fileReader.readAsText(geneList);
     fileReader.onload = () => {
-      // The file is supposed to contain one gene per line. Furthermore, gene names are supposed to contain alphanumeric characters only
       const re = /^[a-z0-9\s]+$/i;
       if (!re.test(fileReader.result)) {
         message.error("The selected file contains invalid characters.");
@@ -100,13 +74,18 @@ export class AnnotationService extends React.Component {
     this.setState({ genes: [], geneList: null });
   }
 
-  handleAnnotationsChanged(e) {
+  handleAnnotationsChanged(isSelected, annotation) {
     this.setState(state => {
       let selectedAnnotations = state.selectedAnnotations.slice();
-      e.target.checked
-        ? selectedAnnotations.push({ name: e.target.name, filter: {} })
+      isSelected
+        ? selectedAnnotations.push({
+            name: annotation,
+            filter: this.props.availableAnnotations.find(
+              a => a.key === annotation
+            ).defaults
+          })
         : (selectedAnnotations = selectedAnnotations.filter(
-            a => a.name !== e.target.name
+            a => a.name !== annotation
           ));
 
       return { selectedAnnotations: selectedAnnotations };
@@ -114,9 +93,9 @@ export class AnnotationService extends React.Component {
   }
 
   handleFilterChanged(annotation, filter) {
+    console.log(annotation, filter);
     this.setState(state => {
-      let selectedAnnotations = state.selectedAnnotations.slice();
-      selectedAnnotations = selectedAnnotations.map(sa => {
+      const selectedAnnotations = state.selectedAnnotations.map(sa => {
         if (sa.name === annotation) {
           sa.filter = Object.assign({}, sa.filter, filter);
         }
@@ -127,23 +106,78 @@ export class AnnotationService extends React.Component {
   }
 
   isFormValid() {
-    return this.state.selectedAnnotations.length && this.state.genes.length;
+    let valid = true;
+    valid = valid && this.state.selectedAnnotations.length;
+    valid = valid && this.state.genes.length;
+
+    const GO = this.state.selectedAnnotations.find(a => a.name === "GO");
+    if (GO) valid = valid && GO.filter.namespace.length;
+    return valid;
   }
 
-  componentDidUpdate() {
-    console.log(this.state);
-  }
-
-  componentDidMount() {}
+  componentDidUpdate() {}
 
   downloadFile() {
     console.log("Download the file");
   }
 
   handleSubmit() {
-    this.setState({
-      annotationResult: {
-        graph: result.default.graph.nodes.concat(result.default.graph.edges)
+    const annotationResult = new AnnotationRequest();
+    annotationResult.setGenesList(
+      this.state.genes.map(g => {
+        const gene = new Gene();
+        gene.setGeneName(g);
+        return gene;
+      })
+    );
+    annotationResult.setAnnotationsList(
+      this.state.selectedAnnotations.map(sa => {
+        const annotation = new Annotation();
+        annotation.setFunctionName(sa.name);
+        annotation.setFiltersList(
+          sa.filter
+            ? Object.keys(sa.filter).map(k => {
+                const filter = new Filter();
+                filter.setFilter(k);
+                filter.setValue(
+                  Array.isArray(sa.filter[k])
+                    ? sa.filter[k]
+                        .reduce((acc, value) => {
+                          return acc + " " + value;
+                        }, "")
+                        .trim()
+                    : sa.filter[k]
+                );
+                return filter;
+              })
+            : []
+        );
+        return annotation;
+      })
+    );
+
+    console.log("request", JSON.stringify(annotationResult, " ", 4));
+
+    this.setState({ busy: true });
+    const hideLoader = message.loading("Fetching annotation results ...", 0);
+
+    const request = grpc.unary(Annotate.Annotate, {
+      request: annotationResult,
+      host: SERVER_ADDRESS,
+      onEnd: res => {
+        hideLoader();
+        console.log("Response", res);
+        if (res.status === grpc.Code.OK) {
+          this.setState(state => ({
+            busy: false
+          }));
+          message.success("Yes");
+        } else {
+          this.setState({ busy: false });
+          message.error(
+            "Something went wrong while fetching annotation results."
+          );
+        }
       }
     });
   }
@@ -163,10 +197,10 @@ export class AnnotationService extends React.Component {
             />
             <Divider dashed />
             <AnnotationSelection
-              onAnnotationsChanged={this.handleAnnotationsChanged}
-              onAnnotationFilterChanged={this.handleAnnotationFilterChanged}
-              availableAnnotations={this.state.availableAnnotations}
+              handleAnnotationsChanged={this.handleAnnotationsChanged}
+              handleFilterChanged={this.handleFilterChanged}
               selectedAnnotations={this.state.selectedAnnotations}
+              availableAnnotations={this.props.availableAnnotations}
             />
             <Divider dashed />
             <Row type="flex" justify="end">

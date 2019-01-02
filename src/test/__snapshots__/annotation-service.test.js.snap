@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<AnnotationService /> renders correctly 1`] = `
-Array [
+<div
+  style={
+    Object {
+      "padding": "30px 150px",
+    }
+  }
+>
   <form
     className="ant-form ant-form-horizontal"
     onSubmit={[Function]}
@@ -77,7 +83,7 @@ Array [
         </div>
       </div>
     </div>
-  </form>,
+  </form>
   <form
     className="ant-form ant-form-horizontal"
     id="directInputForm"
@@ -201,7 +207,7 @@ Array [
         </div>
       </div>
     </div>
-  </form>,
+  </form>
   <div
     style={
       Object {
@@ -217,7 +223,8 @@ Array [
         }
       }
     >
-       Selected genes
+       
+      Selected genes
     </h4>
     <div
       className="ant-alert ant-alert-warning ant-alert-with-description ant-alert-no-icon"
@@ -232,106 +239,41 @@ Array [
         The genes you input appear here. You may input gene names directly or import them from file.
       </span>
     </div>
-  </div>,
+  </div>
   <div
     className="ant-divider ant-divider-horizontal ant-divider-dashed"
-  />,
-  <h4
-    style={
-      Object {
-        "marginBottom": "15px",
-      }
-    }
-  >
+  />
+  <h4>
     Annotations: 
-  </h4>,
-  <div>
-    <label
-      className="ant-checkbox-wrapper"
+  </h4>
+  <label
+    className="ant-checkbox-wrapper"
+  >
+    <span
+      className="ant-checkbox"
+      style={Object {}}
     >
+      <input
+        checked={false}
+        className="ant-checkbox-input"
+        name="GO"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="checkbox"
+      />
       <span
-        className="ant-checkbox"
-        style={Object {}}
-      >
-        <input
-          checked={false}
-          className="ant-checkbox-input"
-          name="Gene Ontology"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          type="checkbox"
-        />
-        <span
-          className="ant-checkbox-inner"
-        />
-      </span>
-      <span>
-         
-        Gene Ontology
-         
-      </span>
-    </label>
-  </div>,
-  <div>
-    <label
-      className="ant-checkbox-wrapper"
-    >
-      <span
-        className="ant-checkbox"
-        style={Object {}}
-      >
-        <input
-          checked={false}
-          className="ant-checkbox-input"
-          name="Reactome"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          type="checkbox"
-        />
-        <span
-          className="ant-checkbox-inner"
-        />
-      </span>
-      <span>
-         
-        Reactome
-         
-      </span>
-    </label>
-  </div>,
-  <div>
-    <label
-      className="ant-checkbox-wrapper"
-    >
-      <span
-        className="ant-checkbox"
-        style={Object {}}
-      >
-        <input
-          checked={false}
-          className="ant-checkbox-input"
-          name="Small Molecules"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          type="checkbox"
-        />
-        <span
-          className="ant-checkbox-inner"
-        />
-      </span>
-      <span>
-         
-        Small Molecules
-         
-      </span>
-    </label>
-  </div>,
+        className="ant-checkbox-inner"
+      />
+    </span>
+    <span>
+      Gene-GO
+    </span>
+  </label>
+  <br />
   <div
     className="ant-divider ant-divider-horizontal ant-divider-dashed"
-  />,
+  />
   <div
     className="ant-row-flex ant-row-flex-end"
   >
@@ -363,6 +305,6 @@ Array [
         Submit
       </span>
     </button>
-  </div>,
-]
+  </div>
+</div>
 `;

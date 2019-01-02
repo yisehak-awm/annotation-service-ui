@@ -217,7 +217,8 @@ Array [
         }
       }
     >
-       Selected genes
+       
+      Selected genes
     </h4>
     <div
       className="ant-alert ant-alert-warning ant-alert-with-description ant-alert-no-icon"

@@ -1,7 +1,5 @@
 import React from "react";
 import { Checkbox } from "antd";
-import { GOFilter } from "./go-filter";
-import { GenePathwayFilter } from "./gene-pathway-filter";
 
 const filterFormStyle = {
   paddingLeft: "25px",
@@ -19,18 +17,26 @@ export class AnnotationSelection extends React.Component {
     return (
       <React.Fragment>
         <h4>Annotations: </h4>
+
         {this.props.availableAnnotations.map(a => (
           <React.Fragment key={a.key}>
             <Checkbox
               name={a.key}
-              onChange={e => this.props.onAnnotationsChanged(e)}
+              onChange={e =>
+                this.props.handleAnnotationsChanged(
+                  e.target.checked,
+                  e.target.name
+                )
+              }
             >
               {a.name}
             </Checkbox>
             <br />
             {this.isAnnotationSelected(a.key) && (
               <div style={filterFormStyle} layout="inline">
-                {a.filter}
+                {a.fitlerForm(a.defaults, filter =>
+                  this.props.handleFilterChanged(a.key, filter)
+                )}
               </div>
             )}
           </React.Fragment>

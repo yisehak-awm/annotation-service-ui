@@ -1,8 +1,8 @@
 syntax = "proto3";
 
 message Filter{
-    string filter = 2;
-    string value = 3;
+    string filter = 1;
+    string value = 2;
 }
 
 message Annotation{
@@ -16,7 +16,7 @@ message Gene{
 
 message AnnotationRequest{
     repeated Annotation annotations = 1;
-    repeated Gene genes = 3;
+    repeated Gene genes = 2;
 }
 
 message AnnotationResponse{
@@ -24,5 +24,5 @@ message AnnotationResponse{
 }
 
 service Annotate{
-    rpc Annotate (AnnotationRequest) returns (AnnotationResponse);
+    rpc Annotate (AnnotationRequest) returns (AnnotationResponse) {};
 }
