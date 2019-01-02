@@ -35,8 +35,6 @@ export class AnnotationService extends React.Component {
     this.handleAllGenesRemoved = this.handleAllGenesRemoved.bind(this);
     this.handleAnnotationsChanged = this.handleAnnotationsChanged.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
-
-    console.log(result);
   }
 
   handleGeneAdded(gene) {
