@@ -57,7 +57,10 @@ export class AnnotationResultVisualizer extends React.Component {
       textureOnViewport: true
     });
     this.cy.startBatch();
-    this.cy.add(this.props.graph.nodes.filter(e => e.data.group === "Gene"));
+    this.cy.add(this.props.graph);
+    console.log(
+      this.props.graph.nodes.filter(e => e.data.id && e.data.group === "main")
+    );
     this.cy.endBatch();
     this.layout = !this.props.minimalMode
       ? this.cy.layout(CYTOSCAPE_COLA_CONFIG)
@@ -91,8 +94,7 @@ export class AnnotationResultVisualizer extends React.Component {
   removeFocus() {
     this.cy.json(this.graphStateBeforeFocus);
     this.cy.batch(() => {
-      this.cy.nodes().style({ opacity: 1 });
-      this.cy.edges().style({ opacity: 1 });
+      this.cy.elements().style({ opacity: 1 });
     });
   }
 
@@ -109,19 +111,15 @@ export class AnnotationResultVisualizer extends React.Component {
   focusOnNode(id) {
     this.graphStateBeforeFocus = this.cy.json();
     const hood = this.cy.getElementById(id).closedNeighborhood();
-
+    this.cy.fit(hood);
     this.cy.batch(() => {
-      this.cy.delay(100, () => {
-        hood.layout({ name: "concentric", fit: true }).run();
-      });
       this.cy
-        .nodes()
+        .elements()
         .difference(hood)
         .style({ opacity: 0.1 });
-      this.cy
-        .edges()
-        .difference(hood)
-        .style({ opacity: 0.1 });
+    });
+    this.cy.delay(100, () => {
+      hood.layout(CYTOSCAPE_COLA_CONFIG).run();
     });
   }
 

@@ -38,7 +38,7 @@ const availableAnnotations = [
     )
   },
   {
-    key: "biogridProteinInteraction",
+    key: "biogrid_interaction_annotation",
     name: "Biogrid protein interaction",
     fitlerForm: (defaults, handleFilterChanged) => null
   }

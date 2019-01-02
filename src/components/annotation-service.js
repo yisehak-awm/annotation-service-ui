@@ -17,6 +17,7 @@ import { AnnotationSelection } from "./annotation-selection";
 import { Divider, Button, Row, Icon, message } from "antd";
 import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
 import { AnnotationResultDownload } from "./annotation-result-download";
+import * as result from "../r.json";
 
 export class AnnotationService extends React.Component {
   constructor(props) {
@@ -35,6 +36,8 @@ export class AnnotationService extends React.Component {
     this.handleAllGenesRemoved = this.handleAllGenesRemoved.bind(this);
     this.handleAnnotationsChanged = this.handleAnnotationsChanged.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
+
+    console.log(result);
   }
 
   handleGeneAdded(gene) {
@@ -93,7 +96,6 @@ export class AnnotationService extends React.Component {
   }
 
   handleFilterChanged(annotation, filter) {
-    console.log(annotation, filter);
     this.setState(state => {
       const selectedAnnotations = state.selectedAnnotations.map(sa => {
         if (sa.name === annotation) {
@@ -162,8 +164,6 @@ export class AnnotationService extends React.Component {
       })
     );
 
-    console.log("request", JSON.stringify(annotationResult, " ", 4));
-
     this.setState({ busy: true });
     const hideLoader = message.loading("Fetching annotation results ...", 0);
 
@@ -172,10 +172,11 @@ export class AnnotationService extends React.Component {
       host: SERVER_ADDRESS,
       onEnd: res => {
         hideLoader();
-        console.log("Response", res);
+        console.log("Response", JSON.parse(res.message.array[0]));
         if (res.status === grpc.Code.OK) {
           this.setState(state => ({
-            busy: false
+            busy: false,
+            annotationResult: { graph: JSON.parse(res.message.array[0]) }
           }));
           message.success("Yes");
         } else {
