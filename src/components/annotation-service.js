@@ -17,7 +17,6 @@ import { AnnotationSelection } from "./annotation-selection";
 import { Divider, Button, Row, Icon, message } from "antd";
 import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
 import { AnnotationResultDownload } from "./annotation-result-download";
-import * as result from "../r.json";
 
 export class AnnotationService extends React.Component {
   constructor(props) {
@@ -26,7 +25,7 @@ export class AnnotationService extends React.Component {
       genes: [],
       geneList: null,
       selectedAnnotations: [],
-      annotationResult: { graph: result.default },
+      annotationResult: null,
       busy: false
     };
     // bind functions
