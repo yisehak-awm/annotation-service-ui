@@ -7,7 +7,7 @@ import { GenePathwayFilter } from "./components/gene-pathway-filter";
 
 const availableAnnotations = [
   {
-    key: "GO",
+    key: "gene_go_annotation",
     name: "Gene-GO",
     defaults: {
       parents: 0,
@@ -23,7 +23,7 @@ const availableAnnotations = [
     )
   },
   {
-    key: "genePathway",
+    key: "gene_pathway_annotation",
     name: "Gene pathway",
     defaults: {
       namespace: ["SMPDB"],

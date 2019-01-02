@@ -110,7 +110,9 @@ export class AnnotationService extends React.Component {
     valid = valid && this.state.selectedAnnotations.length;
     valid = valid && this.state.genes.length;
 
-    const GO = this.state.selectedAnnotations.find(a => a.name === "GO");
+    const GO = this.state.selectedAnnotations.find(
+      a => a.name === "gene_go_annotation"
+    );
     if (GO) valid = valid && GO.filter.namespace.length;
     return valid;
   }
@@ -119,6 +121,10 @@ export class AnnotationService extends React.Component {
 
   downloadFile() {
     console.log("Download the file");
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   handleSubmit() {
@@ -146,7 +152,7 @@ export class AnnotationService extends React.Component {
                           return acc + " " + value;
                         }, "")
                         .trim()
-                    : sa.filter[k]
+                    : this.capitalizeFirstLetter(sa.filter[k].toString())
                 );
                 return filter;
               })
