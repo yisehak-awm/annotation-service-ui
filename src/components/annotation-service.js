@@ -26,7 +26,7 @@ export class AnnotationService extends React.Component {
       genes: [],
       geneList: null,
       selectedAnnotations: [],
-      annotationResult: null,
+      annotationResult: { graph: result.default },
       busy: false
     };
     // bind functions
