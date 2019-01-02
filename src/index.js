@@ -10,13 +10,13 @@ const availableAnnotations = [
     key: "gene_go_annotation",
     name: "Gene-GO",
     defaults: {
-      parents: 0,
       namespace: [
         "biological_process",
         "cellular_component",
         "molecular_function"
       ],
-      get_entrez_id: false
+      get_entrez_id: false,
+      parents: 0
     },
     fitlerForm: (defaults, handleFilterChanged) => (
       <GOFilter defaults={defaults} handleFilterChanged={handleFilterChanged} />
@@ -27,8 +27,8 @@ const availableAnnotations = [
     name: "Gene pathway",
     defaults: {
       namespace: ["SMPDB"],
-      include_small_molecule: false,
-      include_prot: false
+      include_prot: false,
+      include_small_molecule: false
     },
     fitlerForm: (defaults, handleFilterChanged) => (
       <GenePathwayFilter
