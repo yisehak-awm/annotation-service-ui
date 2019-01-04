@@ -26,7 +26,7 @@ const availableAnnotations = [
     key: "gene_pathway_annotation",
     name: "Gene pathway",
     defaults: {
-      namespace: ["SMPDB"],
+      namespace: ["smpdb"],
       include_prot: false,
       include_small_molecule: false
     },

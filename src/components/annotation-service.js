@@ -173,6 +173,7 @@ export class AnnotationService extends React.Component {
             busy: false,
             annotationResult: { graph: JSON.parse(res.message.array[0]) }
           }));
+          console.log(res.message.array[0]);
         } else {
           this.setState({ busy: false });
           message.error(res.statusMessage);

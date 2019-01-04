@@ -3,8 +3,8 @@ import { Checkbox, Switch, Form, Row, Col } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 
 const options = [
-  { label: "SMPDB", value: "SMPDB" },
-  { label: "Reactome", value: "Reactome" }
+  { label: "SMPDB", value: "smpdb" },
+  { label: "Reactome", value: "reactome" }
 ];
 
 export class GenePathwayFilter extends React.Component {

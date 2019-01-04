@@ -7,18 +7,20 @@ import {
   Col,
   Button,
   Icon,
-  Tooltip
+  Tooltip,
+  Progress
 } from "antd";
 import * as cytoscape from "cytoscape";
 import { CYTOSCAPE_COLA_CONFIG, CYTOSCAPE_STYLE } from "../visualizer.config";
 import * as cola from "cytoscape-cola";
 const AnnotationColors = [
-  "#D8E0F1",
-  "#EBE1EE",
-  "#F0EDD9",
-  "#D9F7D9",
-  "#EEE",
-  "#F1D8D8"
+  "#C1CEE8",
+  "#DAD3B0",
+  "#E0D0E3",
+  "#C8DECC",
+  "#8FE08F",
+  "#45aaf2",
+  "#12CBC4"
 ];
 
 export class AnnotationResultVisualizer extends React.Component {
@@ -53,8 +55,7 @@ export class AnnotationResultVisualizer extends React.Component {
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
     });
-    this.cy.add(this.props.graph);
-    // this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
+    this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
     this.toggleAnnotationVisibility(this.props.annotations[0], true);
     this.cy.style(
       !this.props.minimalMode
@@ -133,6 +134,10 @@ export class AnnotationResultVisualizer extends React.Component {
       : this.cy.remove(`[group='${annotation}']`);
     this.changeLayout();
     this.registerEventListeners();
+  }
+
+  annotationPercentage(annotation) {
+    return 100;
   }
 
   render() {
@@ -232,8 +237,7 @@ export class AnnotationResultVisualizer extends React.Component {
               bordered={false}
               defaultActiveKey="2"
               style={{
-                background: "none",
-                width: "250px"
+                background: "none"
               }}
             >
               <Collapse.Panel
@@ -244,11 +248,11 @@ export class AnnotationResultVisualizer extends React.Component {
                 {this.props.annotations.map((a, i) => (
                   <React.Fragment key={a}>
                     <Checkbox
-                      style={
-                        this.props.minimalMode
-                          ? {}
-                          : { backgroundColor: AnnotationColors[i] }
-                      }
+                      // style={
+                      //   this.props.minimalMode
+                      //     ? {}
+                      //     : { backgroundColor: AnnotationColors[i] }
+                      // }
                       defaultChecked={i === 0}
                       onChange={e =>
                         this.toggleAnnotationVisibility(a, e.target.checked)
@@ -256,7 +260,12 @@ export class AnnotationResultVisualizer extends React.Component {
                     >
                       {a}
                     </Checkbox>
-                    <br />
+                    <Progress
+                      strokeColor={AnnotationColors[i]}
+                      percent={this.annotationPercentage(a)}
+                      showInfo={false}
+                      size="small"
+                    />
                   </React.Fragment>
                 ))}
               </Collapse.Panel>

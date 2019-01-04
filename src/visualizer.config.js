@@ -46,9 +46,12 @@ export const CYTOSCAPE_STYLE = [
     selector: 'node[group="Gene"]',
     style: {
       shape: "ellipse",
+      width: "mapData(name.length, 0, 30, 20, 100)",
+      "text-max-width": "100px",
       width: 75,
       height: 75,
       color: "#fff",
+      "text-outline-color": "#005bcd",
       "background-color": "#005bcd"
     }
   },
@@ -56,10 +59,13 @@ export const CYTOSCAPE_STYLE = [
     selector: 'node[group="main"]',
     style: {
       shape: "ellipse",
+      width: "mapData(name.length, 0, 30, 20, 100)",
+      "text-max-width": "100px",
       width: 75,
       height: 75,
       color: "#fff",
-      "background-color": "#005bcd"
+      "background-color": "#005bcd",
+      "text-outline-color": "#005bcd"
     }
   },
   // Edge styles
