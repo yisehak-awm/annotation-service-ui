@@ -35,8 +35,6 @@ export class AnnotationService extends React.Component {
     this.handleAllGenesRemoved = this.handleAllGenesRemoved.bind(this);
     this.handleAnnotationsChanged = this.handleAnnotationsChanged.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
-
-    console.log("Server address", SERVER_ADDRESS);
   }
 
   handleGeneAdded(gene) {
@@ -165,24 +163,19 @@ export class AnnotationService extends React.Component {
 
     this.setState({ busy: true });
     const hideLoader = message.loading("Fetching annotation results ...", 0);
-
-    const request = grpc.unary(Annotate.Annotate, {
+    grpc.unary(Annotate.Annotate, {
       request: annotationResult,
       host: SERVER_ADDRESS,
       onEnd: res => {
         hideLoader();
-        console.log("Response", JSON.parse(res.message.array[0]));
         if (res.status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
             annotationResult: { graph: JSON.parse(res.message.array[0]) }
           }));
-          message.success("Yes");
         } else {
           this.setState({ busy: false });
-          message.error(
-            "Something went wrong while fetching annotation results."
-          );
+          message.error(res.statusMessage);
         }
       }
     });

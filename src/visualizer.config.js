@@ -3,8 +3,8 @@ export const MINIMAL_MODE_THRESHOLD = 2000;
 
 export const CYTOSCAPE_COLA_CONFIG = {
   name: "cola",
-  animate: false,
-  maxSimulationTime: 500,
+  animate: true,
+  maxSimulationTime: 3000,
   ungrabifyWhileSimulating: true,
   fit: true,
   padding: 10,

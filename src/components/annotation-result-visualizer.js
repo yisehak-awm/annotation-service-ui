@@ -12,7 +12,6 @@ import {
 import * as cytoscape from "cytoscape";
 import { CYTOSCAPE_COLA_CONFIG, CYTOSCAPE_STYLE } from "../visualizer.config";
 import * as cola from "cytoscape-cola";
-
 const AnnotationColors = [
   "#D8E0F1",
   "#EBE1EE",
@@ -52,23 +51,18 @@ export class AnnotationResultVisualizer extends React.Component {
   componentDidMount() {
     this.cy = cytoscape({
       container: this.cy_wrapper.current,
-      pixelRatio: 1,
-      hideEdgesOnViewport: true,
-      textureOnViewport: true
+      hideEdgesOnViewport: true
     });
-    this.cy.startBatch();
-    this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
-    this.cy.endBatch();
-    this.layout = !this.props.minimalMode
-      ? this.cy.layout(CYTOSCAPE_COLA_CONFIG)
-      : this.cy.layout({ name: "grid" });
+    this.cy.add(this.props.graph);
+    // this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
+    this.toggleAnnotationVisibility(this.props.annotations[0], true);
     this.cy.style(
       !this.props.minimalMode
         ? CYTOSCAPE_STYLE.concat(this.assignColorToAnnotations())
         : CYTOSCAPE_STYLE
     );
     this.registerEventListeners();
-    this.layout.run();
+    this.changeLayout();
   }
 
   registerEventListeners() {
@@ -115,7 +109,18 @@ export class AnnotationResultVisualizer extends React.Component {
     });
   }
 
+  downloadGraphJSON() {
+    const json = `data:text/json;charset=utf-8, ${encodeURIComponent(
+      JSON.stringify(this.props.graph)
+    )}`;
+    const link = document.createElement("a");
+    link.setAttribute("href", json);
+    link.setAttribute("download", "annotation-graph.json");
+    link.click();
+  }
+
   toggleAnnotationVisibility(annotation, show) {
+    console.log(annotation);
     show
       ? this.cy.batch(() => {
           this.cy.add(
@@ -138,7 +143,17 @@ export class AnnotationResultVisualizer extends React.Component {
         }}
       >
         <Row>
-          <Col span={1}>
+          <Col
+            span={1}
+            style={{
+              position: "absolute",
+              top: "15px",
+              left: "15px",
+              backgroundColor: "#fff",
+              borderRadius: "5px",
+              zIndex: 2
+            }}
+          >
             <Button.Group
               style={{
                 position: "absolute",
@@ -177,27 +192,41 @@ export class AnnotationResultVisualizer extends React.Component {
 
               <Tooltip placement="right" title="Download scheme file">
                 <Button
-                  onClick={e => this.props.downloadFile()}
-                  ghost
-                  type="primary"
+                  onClick={e => this.props.downloadSchemeFile()}
                   style={{ border: "none", borderRadius: "0" }}
                 >
-                  <Icon type="download" />
+                  <Icon type="file-text" />
+                </Button>
+              </Tooltip>
+              <Tooltip placement="right" title="Download graph as JSON">
+                <Button
+                  onClick={e => this.downloadGraphJSON()}
+                  style={{ border: "none", borderRadius: "0" }}
+                >
+                  <Icon type="share-alt" />
                 </Button>
               </Tooltip>
             </Button.Group>
           </Col>
-          <Col span={19}>
-            <div>
-              <div
-                style={{
-                  minHeight: "90vh"
-                }}
-                ref={this.cy_wrapper}
-              />
-            </div>
+          <Col span={24}>
+            <div
+              style={{
+                minHeight: "100vh"
+              }}
+              ref={this.cy_wrapper}
+            />
           </Col>
-          <Col span={4}>
+          <Col
+            span={4}
+            style={{
+              position: "absolute",
+              top: "15px",
+              right: "15px",
+              backgroundColor: "#fff",
+              borderRadius: "5px",
+              zIndex: 2
+            }}
+          >
             <Collapse
               accordion
               bordered={false}
@@ -207,7 +236,11 @@ export class AnnotationResultVisualizer extends React.Component {
                 width: "250px"
               }}
             >
-              <Collapse.Panel header="Annotations" key="2">
+              <Collapse.Panel
+                header="Annotations"
+                key="2"
+                style={{ borderBottom: "none" }}
+              >
                 {this.props.annotations.map((a, i) => (
                   <React.Fragment key={a}>
                     <Checkbox
@@ -216,7 +249,7 @@ export class AnnotationResultVisualizer extends React.Component {
                           ? {}
                           : { backgroundColor: AnnotationColors[i] }
                       }
-                      defaultChecked={false}
+                      defaultChecked={i === 0}
                       onChange={e =>
                         this.toggleAnnotationVisibility(a, e.target.checked)
                       }
