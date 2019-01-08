@@ -189,16 +189,18 @@ export class AnnotationService extends React.Component {
       <React.Fragment>
         {this.state.currentPage === Pages.FORM && (
           <div style={{ padding: "30px 150px" }}>
-            <Row type="flex" justify="end">
-              <Button
-                onClick={() => this.setState({ currentPage: Pages.RESULTS })}
-                style={{ border: "none" }}
-                type="primary"
-                ghost
-              >
-                View current results <Icon type="right" />{" "}
-              </Button>
-            </Row>
+            {this.state.annotationResult && (
+              <Row type="flex" justify="end">
+                <Button
+                  onClick={() => this.setState({ currentPage: Pages.RESULTS })}
+                  style={{ border: "none" }}
+                  type="primary"
+                  ghost
+                >
+                  View current results <Icon type="right" />{" "}
+                </Button>
+              </Row>
+            )}
 
             <GeneSelectionForm
               genes={this.state.genes}
