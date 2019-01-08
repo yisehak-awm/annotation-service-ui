@@ -2,8 +2,9 @@ import {
   MAXIMUM_GRAPH_SIZE,
   MINIMAL_MODE_THRESHOLD
 } from "../visualizer.config";
-import { SERVER_ADDRESS } from "../utils";
 import React from "react";
+import { Pages } from "../utils";
+import { SERVER_ADDRESS } from "../utils";
 import { Annotate } from "../proto/annotation_pb_service";
 import {
   AnnotationRequest,
@@ -26,7 +27,8 @@ export class AnnotationService extends React.Component {
       geneList: null,
       selectedAnnotations: [],
       annotationResult: null,
-      busy: false
+      busy: false,
+      currentPage: Pages.FORM
     };
     // bind functions
     this.handleGeneAdded = this.handleGeneAdded.bind(this);
@@ -171,9 +173,9 @@ export class AnnotationService extends React.Component {
         if (res.status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
-            annotationResult: { graph: JSON.parse(res.message.array[0]) }
+            annotationResult: { graph: JSON.parse(res.message.array[0]) },
+            currentPage: Pages.RESULTS
           }));
-          console.log(res.message.array[0]);
         } else {
           this.setState({ busy: false });
           message.error(res.statusMessage);
@@ -185,8 +187,19 @@ export class AnnotationService extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {!this.state.annotationResult && (
+        {this.state.currentPage === Pages.FORM && (
           <div style={{ padding: "30px 150px" }}>
+            <Row type="flex" justify="end">
+              <Button
+                onClick={() => this.setState({ currentPage: Pages.RESULTS })}
+                style={{ border: "none" }}
+                type="primary"
+                ghost
+              >
+                View current results <Icon type="right" />{" "}
+              </Button>
+            </Row>
+
             <GeneSelectionForm
               genes={this.state.genes}
               geneList={this.state.geneList}
@@ -216,7 +229,7 @@ export class AnnotationService extends React.Component {
             </Row>
           </div>
         )}
-        {this.state.annotationResult ? (
+        {this.state.currentPage === Pages.RESULTS ? (
           this.state.annotationResult.graph.nodes.length <
           MAXIMUM_GRAPH_SIZE ? (
             <AnnotationResultVisualizer
@@ -228,9 +241,13 @@ export class AnnotationService extends React.Component {
                   this.state.annotationResult.graph.edges.length >
                 MINIMAL_MODE_THRESHOLD
               }
+              back={() => this.setState({ currentPage: Pages.FORM })}
             />
           ) : (
-            <AnnotationResultDownload downloadFile={this.downloadFile} />
+            <AnnotationResultDownload
+              back={() => this.setState({ currentPage: Pages.FORM })}
+              downloadFile={this.downloadFile}
+            />
           )
         ) : null}
       </React.Fragment>

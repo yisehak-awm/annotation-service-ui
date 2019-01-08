@@ -15,6 +15,13 @@ export class AnnotationResultDownload extends React.Component {
               button below to download the annotation result file.{" "}
             </p>
             <Button
+              style={{ marginBottom: "15px", border: "none" }}
+              onClick={() => this.props.back()}
+            >
+              <Icon type="left" />
+              back
+            </Button>
+            <Button
               onClick={e => this.props.downloadFile()}
               type="primary"
               style={{ marginTop: "15px" }}

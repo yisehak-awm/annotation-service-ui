@@ -27,7 +27,7 @@ export class AnnotationResultVisualizer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedNode: null,
+      selectedNode: { node: null, position: null },
       history: []
     };
 
@@ -55,7 +55,9 @@ export class AnnotationResultVisualizer extends React.Component {
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
     });
-    this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
+    // this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
+    this.cy.add(this.props.graph);
+
     this.toggleAnnotationVisibility(this.props.annotations[0], true);
     this.cy.style(
       !this.props.minimalMode
@@ -68,17 +70,33 @@ export class AnnotationResultVisualizer extends React.Component {
 
   registerEventListeners() {
     this.cy.nodes().on(
+      "mouseover",
+      function(event) {
+        console.log(event);
+        this.setState({
+          selectedNode: {
+            node: event.target.data(),
+            position: event.renderedPosition
+          }
+        });
+      }.bind(this)
+    );
+    this.cy.nodes().on(
       "select",
       function(event) {
         this.focusOnNode(event.target.data().id);
-        this.setState({ selectedNode: event.target.data() });
+      }.bind(this)
+    );
+    this.cy.nodes().on(
+      "mouseout",
+      function(event) {
+        this.setState({ selectedNode: { node: null, position: null } });
       }.bind(this)
     );
     this.cy.nodes().on(
       "unselect",
       function(event) {
         this.removeFocus();
-        this.setState({ selectedNode: null });
       }.bind(this)
     );
   }
@@ -154,16 +172,23 @@ export class AnnotationResultVisualizer extends React.Component {
               position: "absolute",
               top: "15px",
               left: "15px",
-              backgroundColor: "#fff",
-              borderRadius: "5px",
               zIndex: 2
             }}
           >
+            <Button
+              style={{ marginBottom: "15px" }}
+              onClick={() => this.props.back()}
+            >
+              <Icon type="left" />
+              back
+            </Button>
             <Button.Group
               style={{
                 position: "absolute",
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
+                backgroundColor: "#fff",
+                borderRadius: "5px"
               }}
               size="large"
             >
@@ -272,20 +297,20 @@ export class AnnotationResultVisualizer extends React.Component {
             </Collapse>
           </Col>
         </Row>
-        {this.state.selectedNode && (
+        {this.state.selectedNode.node && (
           <Alert
             style={{
               position: "absolute",
-              bottom: "15px",
-              left: "15px",
+              top: `${this.state.selectedNode.position.y}px`,
+              left: `${this.state.selectedNode.position.x}px`,
               width: "350px",
               backgroundColor: "#c9e1f9",
               border: "solid 1px #87BEF5"
             }}
-            message={`${this.state.selectedNode.name} ( ${
-              this.state.selectedNode.id
+            message={`${this.state.selectedNode.node.name} ( ${
+              this.state.selectedNode.node.id
             } )`}
-            description={this.state.selectedNode.definition}
+            description={this.state.selectedNode.node.definition}
             closable
             onClose={() => {}}
           />

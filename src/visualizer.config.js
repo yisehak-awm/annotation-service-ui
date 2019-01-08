@@ -1,5 +1,5 @@
-export const MAXIMUM_GRAPH_SIZE = 2000;
-export const MINIMAL_MODE_THRESHOLD = 2000;
+export const MAXIMUM_GRAPH_SIZE = 1500;
+export const MINIMAL_MODE_THRESHOLD = 750;
 
 export const CYTOSCAPE_COLA_CONFIG = {
   name: "cola",
@@ -46,9 +46,7 @@ export const CYTOSCAPE_STYLE = [
     selector: 'node[group="Gene"]',
     style: {
       shape: "ellipse",
-      width: "mapData(name.length, 0, 30, 20, 100)",
-      "text-max-width": "100px",
-      width: 75,
+      content: "data(id)",
       height: 75,
       color: "#fff",
       "text-outline-color": "#005bcd",
@@ -59,8 +57,7 @@ export const CYTOSCAPE_STYLE = [
     selector: 'node[group="main"]',
     style: {
       shape: "ellipse",
-      width: "mapData(name.length, 0, 30, 20, 100)",
-      "text-max-width": "100px",
+      content: "data(id)",
       width: 75,
       height: 75,
       color: "#fff",
@@ -72,10 +69,14 @@ export const CYTOSCAPE_STYLE = [
   {
     selector: "edge",
     css: {
-      "curve-style": "haystack",
+      "curve-style": "straight",
       "line-color": "#ccc",
       width: 6,
-      "overlay-padding": 3
+      "overlay-padding": 3,
+      label: "data(name)",
+      "text-rotation": "autorotate",
+      "text-outline-width": 2,
+      "text-outline-color": "#fff"
     }
   }
 ];

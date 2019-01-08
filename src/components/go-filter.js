@@ -46,7 +46,6 @@ export class GOFilter extends React.Component {
                   onChange={e => {
                     this.props.handleFilterChanged({ get_entrez_id: e });
                   }}
-                  disabled
                 />{" "}
                 Include Entrez ID
               </FormItem>
