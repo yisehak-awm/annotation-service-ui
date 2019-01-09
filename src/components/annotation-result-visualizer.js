@@ -55,8 +55,8 @@ export class AnnotationResultVisualizer extends React.Component {
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
     });
-    // this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
-    this.cy.add(this.props.graph);
+    this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
+    // this.cy.add(this.props.graph);
 
     this.toggleAnnotationVisibility(this.props.annotations[0], true);
     this.cy.style(
@@ -111,7 +111,10 @@ export class AnnotationResultVisualizer extends React.Component {
     return this.props.annotations.reduce((acc, ann, i, arr) => {
       acc.push({
         selector: 'edge[group="' + ann + '"]',
-        style: { "line-color": AnnotationColors[i] }
+        style: {
+          "line-color": AnnotationColors[i],
+          "text-outline-color": AnnotationColors[i]
+        }
       });
       return acc;
     }, []);
@@ -155,7 +158,12 @@ export class AnnotationResultVisualizer extends React.Component {
   }
 
   annotationPercentage(annotation) {
-    return 100;
+    return (
+      (100 *
+        this.props.graph.edges.filter(e => e.data.group === annotation)
+          .length) /
+      this.props.graph.edges.length
+    );
   }
 
   render() {
@@ -175,13 +183,6 @@ export class AnnotationResultVisualizer extends React.Component {
               zIndex: 2
             }}
           >
-            <Button
-              style={{ marginBottom: "15px" }}
-              onClick={() => this.props.back()}
-            >
-              <Icon type="left" />
-              back
-            </Button>
             <Button.Group
               style={{
                 position: "absolute",
@@ -273,11 +274,6 @@ export class AnnotationResultVisualizer extends React.Component {
                 {this.props.annotations.map((a, i) => (
                   <React.Fragment key={a}>
                     <Checkbox
-                      // style={
-                      //   this.props.minimalMode
-                      //     ? {}
-                      //     : { backgroundColor: AnnotationColors[i] }
-                      // }
                       defaultChecked={i === 0}
                       onChange={e =>
                         this.toggleAnnotationVisibility(a, e.target.checked)

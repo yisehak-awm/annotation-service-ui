@@ -11,7 +11,7 @@ export const CYTOSCAPE_COLA_CONFIG = {
   randomize: true,
   avoidOverlap: true,
   handleDisconnected: true,
-  nodeSpacing: 30,
+  nodeSpacing: 20,
   infinite: false
 };
 
@@ -21,9 +21,9 @@ export const CYTOSCAPE_STYLE = [
     selector: "node",
     css: {
       shape: "round-rectangle",
-      width: "mapData(name.length, 0, 65, 50, 500)",
+      width: "mapData(id.length, 0, 20, 50, 300)",
       height: "40",
-      content: "data(name)",
+      content: "data(id)",
       color: "#fff",
       "text-wrap": "wrap",
       "text-max-width": "350px",

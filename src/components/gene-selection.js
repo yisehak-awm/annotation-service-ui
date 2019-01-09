@@ -91,8 +91,8 @@ export class GeneSelection extends React.Component {
                 Click here or drag file containing list of genes.
               </p>
               <p className="ant-upload-hint">
-                Please make sure the file is a plain text file containing one
-                gene per line.
+                Please make sure the file is a plain text file containing a gene
+                name per line.
               </p>
             </Upload.Dragger>
 

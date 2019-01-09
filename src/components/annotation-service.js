@@ -27,8 +27,7 @@ export class AnnotationService extends React.Component {
       geneList: null,
       selectedAnnotations: [],
       annotationResult: null,
-      busy: false,
-      currentPage: Pages.FORM
+      busy: false
     };
     // bind functions
     this.handleGeneAdded = this.handleGeneAdded.bind(this);
@@ -39,10 +38,10 @@ export class AnnotationService extends React.Component {
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
   }
 
-  handleGeneAdded(gene) {
+  handleGeneAdded(input) {
     this.setState(state => {
-      const genes = state.genes.slice(0);
-      genes.push(gene);
+      let genes = state.genes.slice(0);
+      genes = [...genes, ...input.trim().split(" ")];
       return { genes: genes };
     });
   }
@@ -187,21 +186,8 @@ export class AnnotationService extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {this.state.currentPage === Pages.FORM && (
+        {!this.state.annotationResult && (
           <div style={{ padding: "30px 150px" }}>
-            {this.state.annotationResult && (
-              <Row type="flex" justify="end">
-                <Button
-                  onClick={() => this.setState({ currentPage: Pages.RESULTS })}
-                  style={{ border: "none" }}
-                  type="primary"
-                  ghost
-                >
-                  View current results <Icon type="right" />{" "}
-                </Button>
-              </Row>
-            )}
-
             <GeneSelectionForm
               genes={this.state.genes}
               geneList={this.state.geneList}
@@ -231,7 +217,7 @@ export class AnnotationService extends React.Component {
             </Row>
           </div>
         )}
-        {this.state.currentPage === Pages.RESULTS ? (
+        {this.state.annotationResult ? (
           this.state.annotationResult.graph.nodes.length <
           MAXIMUM_GRAPH_SIZE ? (
             <AnnotationResultVisualizer
@@ -243,13 +229,9 @@ export class AnnotationService extends React.Component {
                   this.state.annotationResult.graph.edges.length >
                 MINIMAL_MODE_THRESHOLD
               }
-              back={() => this.setState({ currentPage: Pages.FORM })}
             />
           ) : (
-            <AnnotationResultDownload
-              back={() => this.setState({ currentPage: Pages.FORM })}
-              downloadFile={this.downloadFile}
-            />
+            <AnnotationResultDownload downloadFile={this.downloadFile} />
           )
         ) : null}
       </React.Fragment>
