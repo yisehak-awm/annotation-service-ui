@@ -16,6 +16,7 @@ export class GenePathwayFilter extends React.Component {
             <Checkbox.Group
               options={options}
               defaultValue={this.props.defaults.namespace}
+              onChange={e => this.props.handleFilterChanged({ namespace: e })}
             />
           </FormItem>
 

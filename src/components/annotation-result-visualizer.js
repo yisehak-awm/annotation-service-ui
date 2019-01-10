@@ -55,9 +55,9 @@ export class AnnotationResultVisualizer extends React.Component {
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
     });
-    this.cy.add(this.props.graph.nodes.filter(n => n.data.group === "main"));
-    // this.cy.add(this.props.graph);
-
+    this.cy.add(
+      this.props.graph.nodes.filter(n => n.data.group === "main" && n.data.id)
+    );
     this.toggleAnnotationVisibility(this.props.annotations[0], true);
     this.cy.style(
       !this.props.minimalMode
@@ -142,14 +142,17 @@ export class AnnotationResultVisualizer extends React.Component {
   }
 
   toggleAnnotationVisibility(annotation, show) {
-    console.log(annotation);
     show
       ? this.cy.batch(() => {
           this.cy.add(
-            this.props.graph.nodes.filter(e => e.data.group === annotation)
+            this.props.graph.nodes.filter(
+              e => e.data.group === annotation && e.data.id
+            )
           );
           this.cy.add(
-            this.props.graph.edges.filter(e => e.data.group === annotation)
+            this.props.graph.edges.filter(
+              e => e.data.group === annotation && e.data.source && e.data.target
+            )
           );
         })
       : this.cy.remove(`[group='${annotation}']`);

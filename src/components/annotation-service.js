@@ -3,7 +3,6 @@ import {
   MINIMAL_MODE_THRESHOLD
 } from "../visualizer.config";
 import React from "react";
-import { Pages } from "../utils";
 import { SERVER_ADDRESS } from "../utils";
 import { Annotate } from "../proto/annotation_pb_service";
 import {
@@ -172,12 +171,26 @@ export class AnnotationService extends React.Component {
         if (res.status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
-            annotationResult: { graph: JSON.parse(res.message.array[0]) },
-            currentPage: Pages.RESULTS
+            annotationResult: { graph: JSON.parse(res.message.array[0]) }
           }));
         } else {
-          this.setState({ busy: false });
-          message.error(res.statusMessage);
+          if (res.statusMessage.includes("Gene Does't exist")) {
+            const invalidGenes = res.statusMessage
+              .split("`")[1]
+              .split(",")
+              .map(g => g.trim())
+              .filter(g => g);
+            this.setState(state => ({
+              busy: false,
+              genes: state.genes.filter(g => !invalidGenes.includes(g))
+            }));
+          } else {
+            this.setState(state => ({
+              busy: false
+            }));
+          }
+
+          message.error(res.statusMessage, 5);
         }
       }
     });
