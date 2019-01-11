@@ -38,19 +38,6 @@ export class GOFilter extends React.Component {
               </FormItem>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col md={12} lg={8} xl={6}>
-              <FormItem>
-                <Switch
-                  defaultChecked={this.props.defaults.get_entrez_id}
-                  onChange={e => {
-                    this.props.handleFilterChanged({ get_entrez_id: e });
-                  }}
-                />{" "}
-                Include Entrez ID
-              </FormItem>
-            </Col>
-          </Row>
         </Form>
       </React.Fragment>
     );

@@ -40,7 +40,13 @@ export class AnnotationService extends React.Component {
   handleGeneAdded(input) {
     this.setState(state => {
       let genes = state.genes.slice(0);
-      genes = [...genes, ...input.trim().split(" ")];
+      genes = [
+        ...genes,
+        ...input
+          .trim()
+          .toUpperCase()
+          .split(" ")
+      ];
       return { genes: genes };
     });
   }
