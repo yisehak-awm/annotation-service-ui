@@ -13,14 +13,22 @@ import {
 import * as cytoscape from "cytoscape";
 import { CYTOSCAPE_COLA_CONFIG, CYTOSCAPE_STYLE } from "../visualizer.config";
 import * as cola from "cytoscape-cola";
-const AnnotationColors = [
+import coseBilkent from "cytoscape-cose-bilkent";
+const AnnotationColorsLight = [
   "#C1CEE8",
   "#DAD3B0",
   "#E0D0E3",
   "#C8DECC",
-  "#8FE08F",
-  "#45aaf2",
-  "#12CBC4"
+  "#b7defa",
+  "#d6a8b7"
+];
+const AnnotationColorsDark = [
+  "#587bc1",
+  "#b6a863",
+  "#a06fa9",
+  "#70a97a",
+  "#24a5f5",
+  "#b5637e"
 ];
 
 export class AnnotationResultVisualizer extends React.Component {
@@ -33,12 +41,14 @@ export class AnnotationResultVisualizer extends React.Component {
 
     this.cy_wrapper = React.createRef();
     cytoscape.use(cola);
+    // cytoscape.use(coseBilkent);
   }
 
   changeLayout() {
     this.layout = !this.props.minimalMode
       ? this.cy.layout(CYTOSCAPE_COLA_CONFIG)
       : this.cy.layout({ name: "cose" });
+    // this.layout = this.cy.layout(defaultOptions);
     this.layout.run();
   }
 
@@ -112,8 +122,17 @@ export class AnnotationResultVisualizer extends React.Component {
       acc.push({
         selector: 'edge[group="' + ann + '"]',
         style: {
-          "line-color": AnnotationColors[i],
-          "text-outline-color": AnnotationColors[i]
+          "line-color": AnnotationColorsLight[i],
+          "text-outline-color": AnnotationColorsLight[i]
+        }
+      });
+      acc.push({
+        selector: 'node[group="' + ann + '"]',
+        style: {
+          "background-color": AnnotationColorsDark[i],
+          color: "#fff",
+          "text-outline-width": 2,
+          "text-outline-color": AnnotationColorsDark[i]
         }
       });
       return acc;
@@ -240,6 +259,22 @@ export class AnnotationResultVisualizer extends React.Component {
                   <Icon type="share-alt" />
                 </Button>
               </Tooltip>
+              <Tooltip
+                placement="right"
+                title={
+                  <div>
+                    <p>
+                      Use the checkboxes to the right to filter the graph by
+                      annotations.
+                    </p>
+                    <p>Click on a gene node to see its annotations.</p>
+                  </div>
+                }
+              >
+                <Button style={{ border: "none", borderRadius: "0" }}>
+                  <Icon type="info-circle" />
+                </Button>
+              </Tooltip>
             </Button.Group>
           </Col>
           <Col span={24}>
@@ -285,7 +320,7 @@ export class AnnotationResultVisualizer extends React.Component {
                       {a}
                     </Checkbox>
                     <Progress
-                      strokeColor={AnnotationColors[i]}
+                      strokeColor={AnnotationColorsLight[i]}
                       percent={this.annotationPercentage(a)}
                       showInfo={false}
                       size="small"
@@ -318,3 +353,49 @@ export class AnnotationResultVisualizer extends React.Component {
     );
   }
 }
+
+var defaultOptions = {
+  name: "cose-bilkent",
+  // Called on `layoutready`
+  ready: function() {},
+  // Called on `layoutstop`
+  stop: function() {},
+  // Whether to include labels in node dimensions. Useful for avoiding label overlap
+  nodeDimensionsIncludeLabels: false,
+  // number of ticks per frame; higher is faster but more jerky
+  refresh: 30,
+  // Whether to fit the network view after when done
+
+  // Padding on fit
+  padding: 10,
+  // Whether to enable incremental mode
+  randomize: true,
+  // Node repulsion (non overlapping) multiplier
+  nodeRepulsion: 4500,
+  // Ideal (intra-graph) edge length
+  idealEdgeLength: 50,
+  // Divisor to compute edge forces
+  edgeElasticity: 0.45,
+  // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
+  nestingFactor: 0.1,
+  // Gravity force (constant)
+  gravity: 0.25,
+  // Maximum number of iterations to perform
+  numIter: 2500,
+  // Whether to tile disconnected nodes
+  tile: true,
+  // Type of layout animation. The option set is {'during', 'end', false}
+  animate: "end",
+  // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
+  tilingPaddingVertical: 10,
+  // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
+  tilingPaddingHorizontal: 10,
+  // Gravity range (constant) for compounds
+  gravityRangeCompound: 1.5,
+  // Gravity force (constant) for compounds
+  gravityCompound: 1.0,
+  // Gravity range (constant)
+  gravityRange: 3.8,
+  // Initial cooling factor for incremental layout
+  initialEnergyOnIncremental: 0.5
+};

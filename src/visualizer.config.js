@@ -1,5 +1,5 @@
 export const MAXIMUM_GRAPH_SIZE = 1500;
-export const MINIMAL_MODE_THRESHOLD = 750;
+export const MINIMAL_MODE_THRESHOLD = 1500;
 
 export const CYTOSCAPE_COLA_CONFIG = {
   name: "cola",
@@ -75,7 +75,7 @@ export const CYTOSCAPE_STYLE = [
       "overlay-padding": 3,
       label: "data(name)",
       "text-rotation": "autorotate",
-      "text-outline-width": 2,
+      "text-outline-width": 1,
       "text-outline-color": "#fff"
     }
   }
