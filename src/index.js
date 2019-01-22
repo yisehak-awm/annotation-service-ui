@@ -15,6 +15,7 @@ const availableAnnotations = [
         "cellular_component",
         "molecular_function"
       ],
+      get_entrez_id: "False",
       parents: 0
     },
     fitlerForm: (defaults, handleFilterChanged) => (

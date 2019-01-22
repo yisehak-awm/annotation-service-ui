@@ -1,13 +1,14 @@
 import React from "react";
-import { Row, Col, Button, Icon } from "antd";
 import logo from "../assets/mozi_globe.png";
+import { Grid, Button } from "@material-ui/core";
+import { ArrowDownward } from "@material-ui/icons";
 
 export class AnnotationResultDownload extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Row type="flex" justify="center" style={{ paddingTop: "30px" }}>
-          <Col style={{ textAlign: "center" }}>
+        <Grid containe style={{ paddingTop: "30px" }}>
+          <Grid item style={{ textAlign: "center" }}>
             <img alt="MOZI globe logo" src={logo} style={{ width: "100px" }} />
             <h2>Annotaion result ready!</h2>
             <p>
@@ -15,22 +16,15 @@ export class AnnotationResultDownload extends React.Component {
               button below to download the annotation result file.{" "}
             </p>
             <Button
-              style={{ marginBottom: "15px", border: "none" }}
-              onClick={() => this.props.back()}
+              variant="contained"
+              onClick={e => this.props.downloadSchemeFile()}
+              color="primary"
             >
-              <Icon type="left" />
-              back
-            </Button>
-            <Button
-              onClick={e => this.props.downloadFile()}
-              type="primary"
-              style={{ marginTop: "15px" }}
-            >
-              <Icon type="download" />
+              <ArrowDownward />
               Download annotation results
             </Button>
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </React.Fragment>
     );
   }

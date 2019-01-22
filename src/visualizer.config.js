@@ -35,6 +35,27 @@ export const CYTOSCAPE_STYLE = [
     }
   },
   {
+    selector: 'node[group="biogrid_interaction_annotation"]',
+    css: {
+      shape: "ellipse",
+      width: 75,
+      height: 75
+    }
+  },
+  {
+    selector: 'node[id^="Uni"]',
+    css: {
+      shape: "hexagon"
+    }
+  },
+  {
+    selector: 'node[id^="ChEBI"]',
+    css: {
+      shape: "diamond",
+      height: 75
+    }
+  },
+  {
     selector: "node:selected",
     css: {
       "border-width": 5,
@@ -69,14 +90,14 @@ export const CYTOSCAPE_STYLE = [
   {
     selector: "edge",
     css: {
-      "curve-style": "straight",
+      "curve-style": "haystack",
       "line-color": "#ccc",
-      width: 6,
-      "overlay-padding": 3,
-      label: "data(name)",
-      "text-rotation": "autorotate",
-      "text-outline-width": 1,
-      "text-outline-color": "#fff"
+      width: 4
+      // "overlay-padding": 3,
+      // label: "data(name)",
+      // "text-rotation": "autorotate",
+      // "text-outline-width": 1,
+      // "text-outline-color": "#fff"
     }
   }
 ];

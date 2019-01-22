@@ -1,11 +1,10 @@
 import React from "react";
-import { Checkbox } from "antd";
+
+import { Checkbox, FormControlLabel } from "@material-ui/core";
 
 const filterFormStyle = {
   paddingLeft: "25px",
-  marginBottom: "30px",
   marginLeft: "5px",
-  paddingTop: "15px",
   borderLeft: "dashed 1px #ddd"
 };
 
@@ -20,17 +19,21 @@ export class AnnotationSelection extends React.Component {
 
         {this.props.availableAnnotations.map(a => (
           <React.Fragment key={a.key}>
-            <Checkbox
-              name={a.key}
-              onChange={e =>
-                this.props.handleAnnotationsChanged(
-                  e.target.checked,
-                  e.target.name
-                )
+            <FormControlLabel
+              value="0"
+              control={
+                <Checkbox
+                  name={a.key}
+                  onChange={e =>
+                    this.props.handleAnnotationsChanged(
+                      e.target.checked,
+                      e.target.name
+                    )
+                  }
+                />
               }
-            >
-              {a.name}
-            </Checkbox>
+              label={a.name}
+            />
             <br />
             {this.isAnnotationSelected(a.key) && (
               <div style={filterFormStyle} layout="inline">

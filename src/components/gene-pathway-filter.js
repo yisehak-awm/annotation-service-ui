@@ -1,6 +1,11 @@
 import React from "react";
-import { Checkbox, Switch, Form, Row, Col } from "antd";
-import FormItem from "antd/lib/form/FormItem";
+import {
+  Grid,
+  Checkbox,
+  FormControlLabel,
+  FormLabel,
+  Switch
+} from "@material-ui/core";
 
 const options = [
   { label: "SMPDB", value: "smpdb" },
@@ -8,43 +13,72 @@ const options = [
 ];
 
 export class GenePathwayFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.namespaces = this.props.defaults.namespace;
+  }
+
   render() {
     return (
       <React.Fragment>
-        <Form layout="inline">
-          <FormItem label="Pathway">
-            <Checkbox.Group
-              options={options}
-              defaultValue={this.props.defaults.namespace}
-              onChange={e => this.props.handleFilterChanged({ namespace: e })}
-            />
-          </FormItem>
-
-          <Row gutter={16}>
-            <Col md={12} lg={8} xl={6}>
-              <FormItem>
-                <Switch
+        <form>
+          <FormLabel component="legend">Select pathways</FormLabel>
+          {options.map(n => (
+            <FormControlLabel
+              key={n.value}
+              value={n.value}
+              control={
+                <Checkbox
+                  name={n.value}
+                  defaultChecked={this.props.defaults.namespace.includes(
+                    n.value
+                  )}
                   onChange={e => {
+                    if (e.target.checked) {
+                      this.namespaces.push(e.target.name);
+                    } else {
+                      this.namespaces = this.namespaces.filter(
+                        n => n !== e.target.name
+                      );
+                    }
                     this.props.handleFilterChanged({
-                      include_small_molecule: e
+                      namespace: this.namespaces
                     });
                   }}
-                />{" "}
-                Small molecules
-              </FormItem>
-            </Col>
-            <Col md={12} lg={8} xl={6}>
-              <FormItem>
-                <Switch
-                  onChange={e => {
-                    this.props.handleFilterChanged({ include_prot: e });
-                  }}
-                />{" "}
-                Proteins
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+                />
+              }
+              label={n.label}
+            />
+          ))}
+          <Grid container spacing={16}>
+            <Grid item>
+              <FormControlLabel
+                control={
+                  <Switch
+                    onChange={e => {
+                      this.props.handleFilterChanged({
+                        include_small_molecule: e.target.checked
+                      });
+                    }}
+                  />
+                }
+                label="Small molecules"
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    onChange={e => {
+                      this.props.handleFilterChanged({
+                        include_prot: e.target.checked
+                      });
+                    }}
+                  />
+                }
+                label="Proteins"
+              />
+            </Grid>
+          </Grid>
+        </form>
       </React.Fragment>
     );
   }

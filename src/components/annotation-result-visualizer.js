@@ -1,34 +1,43 @@
 import React from "react";
-import {
-  Alert,
-  Collapse,
-  Checkbox,
-  Row,
-  Col,
-  Button,
-  Icon,
-  Tooltip,
-  Progress
-} from "antd";
 import * as cytoscape from "cytoscape";
 import { CYTOSCAPE_COLA_CONFIG, CYTOSCAPE_STYLE } from "../visualizer.config";
 import * as cola from "cytoscape-cola";
-import coseBilkent from "cytoscape-cose-bilkent";
+import {
+  Grid,
+  FormControlLabel,
+  Checkbox,
+  IconButton,
+  Tooltip,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  FormGroup
+} from "@material-ui/core";
+import {
+  Shuffle,
+  PhotoCameraOutlined,
+  FileCopyOutlined,
+  HelpOutline,
+  Share,
+  ExpandMore
+} from "@material-ui/icons";
+import { showNotification } from "../utils";
+
 const AnnotationColorsLight = [
-  "#C1CEE8",
-  "#DAD3B0",
+  "#c2ddf0",
+  "#d2cfe2",
+  "#e6e2cb",
   "#E0D0E3",
-  "#C8DECC",
-  "#b7defa",
-  "#d6a8b7"
+  "#C1CEE8",
+  "#C8DECC"
 ];
 const AnnotationColorsDark = [
-  "#587bc1",
+  "#70b1dc",
+  "#776fa9",
   "#b6a863",
   "#a06fa9",
-  "#70a97a",
-  "#24a5f5",
-  "#b5637e"
+  "#587bc1",
+  "#70a97a"
 ];
 
 export class AnnotationResultVisualizer extends React.Component {
@@ -61,6 +70,7 @@ export class AnnotationResultVisualizer extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.graph);
     this.cy = cytoscape({
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
@@ -192,12 +202,18 @@ export class AnnotationResultVisualizer extends React.Component {
     return (
       <div
         style={{
-          minHeight: "90vh"
+          minHeight: "85vh"
         }}
       >
-        <Row>
-          <Col
-            span={1}
+        <div style={{ position: "absolute" }}>
+          {this.props.notification &&
+            showNotification(this.props.notification, () => {})}
+        </div>
+
+        <Grid container>
+          <Grid
+            item
+            cs={1}
             style={{
               position: "absolute",
               top: "15px",
@@ -205,7 +221,7 @@ export class AnnotationResultVisualizer extends React.Component {
               zIndex: 2
             }}
           >
-            <Button.Group
+            <div
               style={{
                 position: "absolute",
                 display: "flex",
@@ -216,48 +232,25 @@ export class AnnotationResultVisualizer extends React.Component {
               size="large"
             >
               <Tooltip placement="right" title="Change layout">
-                <Button
-                  onClick={e => this.changeLayout()}
-                  style={{ border: "none" }}
-                >
-                  <Icon type="swap" />
-                </Button>
+                <IconButton onClick={e => this.changeLayout()}>
+                  <Shuffle />
+                </IconButton>
               </Tooltip>
               <Tooltip placement="right" title="Save screenshot">
-                <Button
-                  onClick={e => this.takeScreenshot()}
-                  style={{ border: "none" }}
-                >
-                  <Icon type="camera" />
-                </Button>
+                <IconButton onClick={e => this.takeScreenshot()}>
+                  <PhotoCameraOutlined />
+                </IconButton>
               </Tooltip>
-
-              {this.state.history.length > 0 && (
-                <Tooltip placement="right" title="Undo">
-                  <Button
-                    style={{ border: "none", borderRadius: "0" }}
-                    onClick={e => this.undo()}
-                  >
-                    <Icon type="undo" />
-                  </Button>
-                </Tooltip>
-              )}
 
               <Tooltip placement="right" title="Download scheme file">
-                <Button
-                  onClick={e => this.props.downloadSchemeFile()}
-                  style={{ border: "none", borderRadius: "0" }}
-                >
-                  <Icon type="file-text" />
-                </Button>
+                <IconButton onClick={e => this.props.downloadSchemeFile()}>
+                  <FileCopyOutlined />
+                </IconButton>
               </Tooltip>
               <Tooltip placement="right" title="Download graph as JSON">
-                <Button
-                  onClick={e => this.downloadGraphJSON()}
-                  style={{ border: "none", borderRadius: "0" }}
-                >
-                  <Icon type="share-alt" />
-                </Button>
+                <IconButton onClick={e => this.downloadGraphJSON()}>
+                  <Share />
+                </IconButton>
               </Tooltip>
               <Tooltip
                 placement="right"
@@ -267,26 +260,32 @@ export class AnnotationResultVisualizer extends React.Component {
                       Use the checkboxes to the right to filter the graph by
                       annotations.
                     </p>
-                    <p>Click on a gene node to see its annotations.</p>
+                    <p>
+                      Click on a gene node to see annotations connected to it.
+                    </p>
+                    <p>
+                      Click on an annotation to see which genes it annotates.
+                    </p>
                   </div>
                 }
               >
-                <Button style={{ border: "none", borderRadius: "0" }}>
-                  <Icon type="info-circle" />
-                </Button>
+                <IconButton>
+                  <HelpOutline />
+                </IconButton>
               </Tooltip>
-            </Button.Group>
-          </Col>
-          <Col span={24}>
+            </div>
+          </Grid>
+          <Grid item xs={12}>
             <div
               style={{
                 minHeight: "100vh"
               }}
               ref={this.cy_wrapper}
             />
-          </Col>
-          <Col
-            span={4}
+          </Grid>
+          <Grid
+            item
+            xs={3}
             style={{
               position: "absolute",
               top: "15px",
@@ -296,106 +295,73 @@ export class AnnotationResultVisualizer extends React.Component {
               zIndex: 2
             }}
           >
-            <Collapse
-              accordion
-              bordered={false}
-              defaultActiveKey="2"
-              style={{
-                background: "none"
-              }}
-            >
-              <Collapse.Panel
-                header="Annotations"
-                key="2"
-                style={{ borderBottom: "none" }}
-              >
-                {this.props.annotations.map((a, i) => (
-                  <React.Fragment key={a}>
-                    <Checkbox
-                      defaultChecked={i === 0}
-                      onChange={e =>
-                        this.toggleAnnotationVisibility(a, e.target.checked)
-                      }
-                    >
-                      {a}
-                    </Checkbox>
-                    <Progress
-                      strokeColor={AnnotationColorsLight[i]}
-                      percent={this.annotationPercentage(a)}
-                      showInfo={false}
-                      size="small"
-                    />
-                  </React.Fragment>
-                ))}
-              </Collapse.Panel>
-            </Collapse>
-          </Col>
-        </Row>
+            <ExpansionPanel style={{ width: "100%" }}>
+              <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+                Annotations
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <FormGroup>
+                  {this.props.annotations.map((a, i) => (
+                    <React.Fragment>
+                      <FormControlLabel
+                        value="0"
+                        key={a}
+                        control={
+                          <Checkbox
+                            defaultChecked={i === 0}
+                            name={a.key}
+                            onChange={e =>
+                              this.toggleAnnotationVisibility(
+                                a,
+                                e.target.checked
+                              )
+                            }
+                          />
+                        }
+                        label={a}
+                      />
+                      <div
+                        style={{
+                          minHeight: "5px",
+                          width: "100%",
+                          backgroundColor: `${AnnotationColorsLight[i]}`
+                        }}
+                      >
+                        <div
+                          style={{
+                            minHeight: "5px",
+                            width: `${this.annotationPercentage(a)}%`,
+                            backgroundColor: `${AnnotationColorsDark[i]}`
+                          }}
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </FormGroup>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </Grid>
+        </Grid>
         {this.state.selectedNode.node && (
-          <Alert
+          <div
             style={{
               position: "absolute",
               top: `${this.state.selectedNode.position.y}px`,
               left: `${this.state.selectedNode.position.x}px`,
               width: "350px",
               backgroundColor: "#c9e1f9",
-              border: "solid 1px #87BEF5"
+              border: "solid 1px #87BEF5",
+              padding: "5px",
+              borderRadius: "3px"
             }}
-            message={`${this.state.selectedNode.node.name} ( ${
+          >
+            <h4>{`${this.state.selectedNode.node.name} ( ${
               this.state.selectedNode.node.id
-            } )`}
-            description={this.state.selectedNode.node.definition}
-            closable
-            onClose={() => {}}
-          />
+            } )`}</h4>
+            <p>{this.state.selectedNode.node.definition}</p>
+          </div>
         )}
       </div>
     );
   }
 }
-
-var defaultOptions = {
-  name: "cose-bilkent",
-  // Called on `layoutready`
-  ready: function() {},
-  // Called on `layoutstop`
-  stop: function() {},
-  // Whether to include labels in node dimensions. Useful for avoiding label overlap
-  nodeDimensionsIncludeLabels: false,
-  // number of ticks per frame; higher is faster but more jerky
-  refresh: 30,
-  // Whether to fit the network view after when done
-
-  // Padding on fit
-  padding: 10,
-  // Whether to enable incremental mode
-  randomize: true,
-  // Node repulsion (non overlapping) multiplier
-  nodeRepulsion: 4500,
-  // Ideal (intra-graph) edge length
-  idealEdgeLength: 50,
-  // Divisor to compute edge forces
-  edgeElasticity: 0.45,
-  // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
-  nestingFactor: 0.1,
-  // Gravity force (constant)
-  gravity: 0.25,
-  // Maximum number of iterations to perform
-  numIter: 2500,
-  // Whether to tile disconnected nodes
-  tile: true,
-  // Type of layout animation. The option set is {'during', 'end', false}
-  animate: "end",
-  // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
-  tilingPaddingVertical: 10,
-  // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
-  tilingPaddingHorizontal: 10,
-  // Gravity range (constant) for compounds
-  gravityRangeCompound: 1.5,
-  // Gravity force (constant) for compounds
-  gravityCompound: 1.0,
-  // Gravity range (constant)
-  gravityRange: 3.8,
-  // Initial cooling factor for incremental layout
-  initialEnergyOnIncremental: 0.5
-};

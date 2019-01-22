@@ -1,6 +1,5 @@
 import React from "react";
-import { Checkbox, Switch, InputNumber, Form, Row, Col } from "antd";
-import FormItem from "antd/lib/form/FormItem";
+import { TextField, Grid, Checkbox, FormControlLabel } from "@material-ui/core";
 
 const namespaces = [
   { label: "Biological process", value: "biological_process" },
@@ -8,37 +7,60 @@ const namespaces = [
   { label: "Molecular function", value: "molecular_function" }
 ];
 
-const formItemStyle = {
-  marginBottom: 5
-};
-
 export class GOFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.namespaces = this.props.defaults.namespace;
+  }
   render() {
     return (
       <React.Fragment>
-        <Form layout="inline">
-          <FormItem label="Namespace">
-            <Checkbox.Group
-              onChange={namespaces => {
-                this.props.handleFilterChanged({ namespace: namespaces });
-              }}
-              options={namespaces}
-              defaultValue={this.props.defaults.namespace}
-            />
-          </FormItem>
-
-          <Row gutter={16}>
-            <Col md={24} lg={12} xl={8}>
-              <FormItem label="Number of parent terms" style={formItemStyle}>
-                <InputNumber
-                  min={0}
-                  defaultValue={this.props.defaults.parents}
-                  onChange={n => this.props.handleFilterChanged({ parents: n })}
+        <form>
+          {namespaces.map(n => (
+            <FormControlLabel
+              key={n.value}
+              value={n.value}
+              control={
+                <Checkbox
+                  name={n.value}
+                  defaultChecked={this.props.defaults.namespace.includes(
+                    n.value
+                  )}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      this.namespaces.push(e.target.name);
+                    } else {
+                      this.namespaces = this.namespaces.filter(
+                        n => n !== e.target.name
+                      );
+                    }
+                    this.props.handleFilterChanged({
+                      namespace: this.namespaces
+                    });
+                  }}
                 />
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+              }
+              label={n.label}
+            />
+          ))}
+
+          <Grid spacing={24} container>
+            <Grid item>
+              <TextField
+                label="Number of parent terms"
+                placeholder="Number of parent terms"
+                defaultValue={this.props.defaults.parents}
+                margin="dense"
+                variant="outlined"
+                name="gene"
+                fullWidth
+                onChange={n =>
+                  this.props.handleFilterChanged({ parents: n.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+        </form>
       </React.Fragment>
     );
   }

@@ -1,17 +1,32 @@
 import React from "react";
-import { Form, Input, Upload, Icon, Tag, Alert, Radio, Button } from "antd";
+import {
+  TextField,
+  Button,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  Chip,
+  InputAdornment
+} from "@material-ui/core";
+import { CloudUpload, Check, Close, KeyboardReturn } from "@material-ui/icons";
+import Dropzone from "react-dropzone";
+import classNames from "classnames";
+import { checkDuplicate } from "../utils";
 
-export const InputMethods = {
-  DIRECT_INPUT: 1,
-  FILE_UPLOAD: 2
+const InputMethods = {
+  DIRECT_INPUT: "1",
+  FILE_UPLOAD: "2"
 };
 
-export class GeneSelection extends React.Component {
+export class GeneSelectionForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputMethod: InputMethods.DIRECT_INPUT,
-      currentGeneName: ""
+      currentGeneName: "",
+      validationErrors: {
+        gene: null
+      }
     };
     this.uploaderAttributes = {
       name: "geneList",
@@ -24,135 +39,181 @@ export class GeneSelection extends React.Component {
     this.handleGeneAdded = this.handleGeneAdded.bind(this);
   }
 
+  isValid() {
+    let validationErrors = Object.assign({}, this.state.validationErrors);
+    return Object.values(validationErrors).filter(v => v).length === 0;
+  }
+
   handleGeneAdded() {
-    if (!this.props.form.getFieldError("gene") && this.state.currentGeneName) {
+    if (this.state.currentGeneName && !this.state.validationErrors.gene) {
       this.props.onGeneAdded(this.state.currentGeneName);
-      this.props.form.setFieldsValue({ gene: "" });
       this.setState({ currentGeneName: "" });
     }
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const props = {
+      name: "geneList",
+      multiple: false,
+      onDrop: files => {
+        const file = files[0];
+        this.props.onGeneListUploaded(file);
+      }
+    };
 
     return (
       <React.Fragment>
-        <Form>
-          <Form.Item>
-            <Radio.Group
-              id="inputMethod"
-              onChange={e => this.setState({ inputMethod: e.target.value })}
-              value={this.state.inputMethod}
-            >
-              <Radio value={InputMethods.DIRECT_INPUT}>Input directly</Radio>
-              <Radio value={InputMethods.FILE_UPLOAD}>Import from file</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Form>
-
+        <RadioGroup
+          id="inputMethod"
+          onChange={e => {
+            this.setState({ inputMethod: e.target.value });
+          }}
+          style={{ display: "flex", flexDirection: "row" }}
+          defaultValue={this.state.inputMethod}
+        >
+          <FormControlLabel
+            value={InputMethods.DIRECT_INPUT}
+            control={<Radio />}
+            label="Input directly"
+          />
+          <FormControlLabel
+            value={InputMethods.FILE_UPLOAD}
+            control={<Radio />}
+            label="Import from file"
+          />
+        </RadioGroup>
         {this.state.inputMethod === InputMethods.DIRECT_INPUT && (
-          <Form id="directInputForm">
-            <Form.Item label="Gene name" style={{ marginBottom: "0" }}>
-              {getFieldDecorator("gene", {
-                rules: [
-                  { required: true, message: "Please input gene name!" },
-                  {
-                    validator: (rule, value, callback) => {
-                      if (this.props.genes.indexOf(value) !== -1) {
-                        callback("This gene name is already added.");
-                      }
-                      callback();
-                    }
-                  }
-                ]
-              })(
-                <Input
-                  suffix={<Icon type="enter" />}
-                  placeholder="Input gene name and hit enter"
-                  onChange={e =>
-                    this.setState({ currentGeneName: e.target.value.trim() })
-                  }
-                  onPressEnter={() => {
-                    this.handleGeneAdded();
-                  }}
-                />
-              )}
-            </Form.Item>
-          </Form>
+          <TextField
+            {...this.state.validationErrors.gene}
+            label="Gene name"
+            placeholder="Input gene name and hit enter"
+            margin="dense"
+            variant="outlined"
+            name="gene"
+            fullWidth
+            value={this.state.currentGeneName}
+            onChange={e => {
+              let validationErrors = Object.assign(
+                {},
+                this.state.validationErrors
+              );
+              validationErrors.gene = checkDuplicate(
+                e.target.value.trim(),
+                this.props.genes
+              );
+              this.setState({
+                validationErrors: validationErrors,
+                currentGeneName: e.target.value.trim()
+              });
+            }}
+            onKeyDown={e => (e.key === "Enter" ? this.handleGeneAdded() : null)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <KeyboardReturn />
+                </InputAdornment>
+              )
+            }}
+          />
         )}
 
         {this.state.inputMethod === InputMethods.FILE_UPLOAD && (
           <React.Fragment>
-            <Upload.Dragger {...this.uploaderAttributes} fileList={[]}>
-              <p className="ant-upload-drag-icon">
-                <Icon type="import" />
-              </p>
-              <p className="ant-upload-text">
-                Click here or drag file containing list of genes.
-              </p>
-              <p className="ant-upload-hint">
-                Please make sure the file is a plain text file containing a gene
-                name per line.
-              </p>
-            </Upload.Dragger>
+            <Dropzone {...props} style={{ marginBottom: "15px" }}>
+              {({ getRootProps, getInputProps, isDragActive }) => {
+                return (
+                  <div
+                    {...getRootProps()}
+                    className={classNames("dropzone", {
+                      "dropzone--isActive": isDragActive
+                    })}
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      border: "dashed 1px #90D4FF"
+                    }}
+                  >
+                    <input {...getInputProps()} />
+                    {this.props.uploadedFile ? (
+                      <Check style={{ fontSize: "48px", color: "#54C21F" }} />
+                    ) : (
+                      <CloudUpload style={{ fontSize: "48px" }} />
+                    )}
+                    {isDragActive ? (
+                      <p>Drop file here...</p>
+                    ) : (
+                      <p>
+                        Please make sure the file is a plain text file
+                        containing a gene name per line.
+                      </p>
+                    )}
+                  </div>
+                );
+              }}
+            </Dropzone>
 
             {this.props.geneList && this.props.genes.length ? (
-              <Alert
+              <div
                 className="fileDetails"
                 style={{
                   borderRadius: 0,
-                  borderTop: "none",
                   position: "relative",
-                  bottom: "2px"
+                  bottom: "5px",
+                  border: "solid 1px #90D4FF",
+                  borderTop: "none",
+                  padding: "15px",
+                  backgroundColor: "#e1f4ff"
                 }}
-                message={
-                  this.props.geneList.name +
+              >
+                {this.props.geneList.name +
                   " ( " +
-                  this.props.geneList.size / 1000000 +
-                  " MB )"
-                }
-                type="info"
-              />
+                  (this.props.geneList.size / 1000000).toPrecision(2) +
+                  " MB )"}
+              </div>
             ) : null}
           </React.Fragment>
         )}
 
         <div style={{ marginTop: "10px" }}>
           <h4 style={{ color: "#82909d", marginBottom: "5px" }}>
-            {" "}
             Selected genes
             {this.props.genes.length ? (
               <Button
+                id="submit"
+                variant="outlined"
                 onClick={e => this.props.onAllGenesRemoved()}
-                type="danger"
-                ghost
-                style={{ border: "none" }}
+                color="secondary"
+                style={{ marginLeft: "15px" }}
               >
-                {" "}
+                <Close />
                 Remove all
               </Button>
             ) : null}
           </h4>
           {!this.props.genes.length ? (
-            <Alert
+            <div
+              style={{
+                padding: "15px",
+                backgroundColor: "#FFFBE5",
+                border: "solid 1px #ffe7bc",
+                borderRadius: "3px"
+              }}
               id="noGenesAlert"
-              type="warning"
-              description="The genes you input appear here. You may input gene names directly or import them from file."
-            />
+            >
+              The genes you input appear here. You may input gene names directly
+              or import them from file.
+            </div>
           ) : null}
 
           {this.props.genes.length
             ? this.props.genes.map(gene => (
-                <Tag
-                  style={{ marginBottom: "5px" }}
-                  onClose={() => this.props.onGeneRemoved(gene)}
+                <Chip
+                  style={{ marginRight: "5px", marginBottom: "5px" }}
+                  label={<b>{gene}</b>}
+                  onDelete={() => this.props.onGeneRemoved(gene)}
+                  color="primary"
                   key={gene}
-                  closable
-                  color="blue"
-                >
-                  {" "}
-                  {gene}{" "}
-                </Tag>
+                />
               ))
             : null}
         </div>
@@ -160,5 +221,3 @@ export class GeneSelection extends React.Component {
     );
   }
 }
-
-export const GeneSelectionForm = Form.create()(GeneSelection);

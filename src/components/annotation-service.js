@@ -3,7 +3,7 @@ import {
   MINIMAL_MODE_THRESHOLD
 } from "../visualizer.config";
 import React from "react";
-import { SERVER_ADDRESS } from "../utils";
+import { SERVER_ADDRESS, showNotification } from "../utils";
 import { Annotate } from "../proto/annotation_pb_service";
 import {
   AnnotationRequest,
@@ -14,9 +14,11 @@ import {
 import { grpc } from "grpc-web-client";
 import { GeneSelectionForm } from "./gene-selection";
 import { AnnotationSelection } from "./annotation-selection";
-import { Divider, Button, Row, Icon, message } from "antd";
+import { Row, message } from "antd";
 import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
 import { AnnotationResultDownload } from "./annotation-result-download";
+import { Divider, Button } from "@material-ui/core";
+import { Check } from "@material-ui/icons";
 
 export class AnnotationService extends React.Component {
   constructor(props) {
@@ -26,7 +28,8 @@ export class AnnotationService extends React.Component {
       geneList: null,
       selectedAnnotations: [],
       annotationResult: null,
-      busy: false
+      busy: false,
+      notification: null
     };
     // bind functions
     this.handleGeneAdded = this.handleGeneAdded.bind(this);
@@ -35,6 +38,7 @@ export class AnnotationService extends React.Component {
     this.handleAllGenesRemoved = this.handleAllGenesRemoved.bind(this);
     this.handleAnnotationsChanged = this.handleAnnotationsChanged.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
+    this.downloadSchemeFile = this.downloadSchemeFile.bind(this);
   }
 
   handleGeneAdded(input) {
@@ -46,7 +50,8 @@ export class AnnotationService extends React.Component {
           .trim()
           .toUpperCase()
           .split(" ")
-      ];
+      ].filter((g, i, arr) => arr.indexOf(g) === i);
+      console.log(genes);
       return { genes: genes };
     });
   }
@@ -110,22 +115,44 @@ export class AnnotationService extends React.Component {
     });
   }
 
+  componentDidUpdate() {
+    console.log("Annotations", this.state.selectedAnnotations);
+  }
+
   isFormValid() {
     let valid = true;
     valid = valid && this.state.selectedAnnotations.length;
     valid = valid && this.state.genes.length;
 
+    // If Gene GO annotation is selected, namespace must be defined
     const GO = this.state.selectedAnnotations.find(
       a => a.name === "gene_go_annotation"
     );
     if (GO) valid = valid && GO.filter.namespace.length;
+    // If Gene Pathway annotation is selected, namespace must be defined and either protiens or small molecules should be included in the result
+    const Pathway = this.state.selectedAnnotations.find(
+      a => a.name === "gene_pathway_annotation"
+    );
+    if (Pathway) {
+      valid =
+        valid &&
+        (Pathway.filter.include_prot || Pathway.filter.include_small_molecule);
+      valid =
+        valid &&
+        (Pathway.filter.namespace.includes("smpdb") ||
+          Pathway.filter.namespace.includes("reactome"));
+    }
     return valid;
   }
 
-  componentDidUpdate() {}
-
-  downloadFile() {
-    console.log("Download the file");
+  downloadSchemeFile() {
+    const json = `data:application/txt, ${encodeURIComponent(
+      this.state.annotationResult.schemeFile
+    )}`;
+    const link = document.createElement("a");
+    link.setAttribute("href", json);
+    link.setAttribute("download", "annotations-scheme.scm");
+    link.click();
   }
 
   capitalizeFirstLetter(string) {
@@ -167,36 +194,47 @@ export class AnnotationService extends React.Component {
       })
     );
 
-    this.setState({ busy: true });
-    const hideLoader = message.loading("Fetching annotation results ...", 0);
-    grpc.unary(Annotate.Annotate, {
+    this.setState({
+      notification: { message: "Fetching annotation results ...", busy: true }
+    });
+
+    let result = null;
+    grpc.invoke(Annotate.Annotate, {
       request: annotationResult,
       host: SERVER_ADDRESS,
-      onEnd: res => {
-        hideLoader();
-        if (res.status === grpc.Code.OK) {
+      onMessage: message => {
+        if (!result) {
+          result = { graph: JSON.parse(message.array[0]), schemeFile: "" };
+        } else {
+          result.schemeFile += message.array[0];
+        }
+      },
+      onEnd: (status, statusMessage, trailers) => {
+        console.log(statusMessage);
+        if (status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
-            annotationResult: { graph: JSON.parse(res.message.array[0]) }
+            annotationResult: result,
+            notification: null
           }));
         } else {
-          if (res.statusMessage.includes("Gene Does't exist")) {
-            const invalidGenes = res.statusMessage
+          if (statusMessage.includes("Gene Does't exist")) {
+            const invalidGenes = statusMessage
               .split("`")[1]
               .split(",")
               .map(g => g.trim())
               .filter(g => g);
             this.setState(state => ({
               busy: false,
-              genes: state.genes.filter(g => !invalidGenes.includes(g))
+              genes: state.genes.filter(g => !invalidGenes.includes(g)),
+              notification: { message: statusMessage, busy: false }
             }));
           } else {
             this.setState(state => ({
-              busy: false
+              busy: false,
+              notification: { message: statusMessage, busy: false }
             }));
           }
-
-          message.error(res.statusMessage, 5);
         }
       }
     });
@@ -207,6 +245,10 @@ export class AnnotationService extends React.Component {
       <React.Fragment>
         {!this.state.annotationResult && (
           <div style={{ padding: "30px 150px" }}>
+            {this.state.notification &&
+              showNotification(this.state.notification, () => {
+                this.setState({ notification: null });
+              })}
             <GeneSelectionForm
               genes={this.state.genes}
               geneList={this.state.geneList}
@@ -215,22 +257,24 @@ export class AnnotationService extends React.Component {
               onGeneListUploaded={this.handleGeneListUploaded}
               onAllGenesRemoved={this.handleAllGenesRemoved}
             />
-            <Divider dashed />
+            <Divider style={{ margin: "15px 0" }} />
+
             <AnnotationSelection
               handleAnnotationsChanged={this.handleAnnotationsChanged}
               handleFilterChanged={this.handleFilterChanged}
               selectedAnnotations={this.state.selectedAnnotations}
               availableAnnotations={this.props.availableAnnotations}
             />
-            <Divider dashed />
+            <Divider style={{ margin: "15px 0" }} />
             <Row type="flex" justify="end">
               <Button
                 id="submit"
-                type="primary"
-                disabled={!this.isFormValid()}
+                variant="contained"
                 onClick={() => this.handleSubmit()}
+                disabled={!this.isFormValid()}
+                color="primary"
               >
-                <Icon type="check" />
+                <Check />
                 Submit
               </Button>
             </Row>
@@ -240,9 +284,10 @@ export class AnnotationService extends React.Component {
           this.state.annotationResult.graph.nodes.length <
           MAXIMUM_GRAPH_SIZE ? (
             <AnnotationResultVisualizer
+              notification={this.state.notification}
               annotations={this.state.selectedAnnotations.map(a => a.name)}
               graph={this.state.annotationResult.graph}
-              downloadFile={this.downloadFile}
+              downloadSchemeFile={this.downloadSchemeFile}
               minimalMode={
                 this.state.annotationResult.graph.nodes.length +
                   this.state.annotationResult.graph.edges.length >
@@ -250,7 +295,9 @@ export class AnnotationService extends React.Component {
               }
             />
           ) : (
-            <AnnotationResultDownload downloadFile={this.downloadFile} />
+            <AnnotationResultDownload
+              downloadSchemeFile={this.downloadSchemeFile}
+            />
           )
         ) : null}
       </React.Fragment>
