@@ -2,206 +2,195 @@
 
 exports[`<GeneSelectionForm /> renders correctly 1`] = `
 Array [
-  <form
-    className="ant-form ant-form-horizontal"
-    onSubmit={[Function]}
-  >
-    <div
-      className="ant-row ant-form-item"
-    >
-      <div
-        className="ant-form-item-control-wrapper"
-      >
-        <div
-          className="ant-form-item-control"
-        >
-          <span
-            className="ant-form-item-children"
-          >
-            <div
-              className="ant-radio-group ant-radio-group-outline"
-              id="inputMethod"
-            >
-              <label
-                className="ant-radio-wrapper ant-radio-wrapper-checked"
-              >
-                <span
-                  className="ant-radio ant-radio-checked"
-                  style={Object {}}
-                >
-                  <input
-                    checked={true}
-                    className="ant-radio-input"
-                    disabled={false}
-                    onBlur={[Function]}
-                    onChange={[Function]}
-                    onFocus={[Function]}
-                    type="radio"
-                    value={1}
-                  />
-                  <span
-                    className="ant-radio-inner"
-                  />
-                </span>
-                <span>
-                  Input directly
-                </span>
-              </label>
-              <label
-                className="ant-radio-wrapper"
-              >
-                <span
-                  className="ant-radio"
-                  style={Object {}}
-                >
-                  <input
-                    checked={false}
-                    className="ant-radio-input"
-                    disabled={false}
-                    onBlur={[Function]}
-                    onChange={[Function]}
-                    onFocus={[Function]}
-                    type="radio"
-                    value={2}
-                  />
-                  <span
-                    className="ant-radio-inner"
-                  />
-                </span>
-                <span>
-                  Import from file
-                </span>
-              </label>
-            </div>
-          </span>
-        </div>
-      </div>
-    </div>
-  </form>,
-  <form
-    className="ant-form ant-form-horizontal"
-    id="directInputForm"
-    onSubmit={[Function]}
-  >
-    <div
-      className="ant-row ant-form-item"
-      style={
-        Object {
-          "marginBottom": "0",
-        }
+  <div
+    className="MuiFormGroup-root-1"
+    defaultValue="1"
+    id="inputMethod"
+    role="radiogroup"
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
       }
+    }
+  >
+    <label
+      className="MuiFormControlLabel-root-3"
     >
-      <div
-        className="ant-form-item-label"
+      <span
+        className="MuiButtonBase-root-24 MuiIconButton-root-18 MuiPrivateSwitchBase-root-14 MuiRadio-root-9 MuiRadio-colorSecondary-13 MuiPrivateSwitchBase-checked-15 MuiRadio-checked-10"
+        onBlur={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={null}
       >
-        <label
-          className="ant-form-item-required"
-          htmlFor="gene"
-          onClick={[Function]}
-          title="Gene name"
+        <span
+          className="MuiIconButton-label-23"
         >
-          Gene name
-        </label>
-      </div>
-      <div
-        className="ant-form-item-control-wrapper"
+          <svg
+            aria-hidden="true"
+            className="MuiSvgIcon-root-27"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+            />
+          </svg>
+          <input
+            checked={true}
+            className="MuiPrivateSwitchBase-input-17"
+            onChange={[Function]}
+            type="radio"
+            value="1"
+          />
+        </span>
+        <span
+          className="MuiTouchRipple-root-131"
+        />
+      </span>
+      <span
+        className="MuiTypography-root-36 MuiTypography-body1-45 MuiFormControlLabel-label-8"
       >
-        <div
-          className="ant-form-item-control"
+        Input directly
+      </span>
+    </label>
+    <label
+      className="MuiFormControlLabel-root-3"
+    >
+      <span
+        className="MuiButtonBase-root-24 MuiIconButton-root-18 MuiPrivateSwitchBase-root-14 MuiRadio-root-9 MuiRadio-colorSecondary-13"
+        onBlur={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={null}
+      >
+        <span
+          className="MuiIconButton-label-23"
+        >
+          <svg
+            aria-hidden="true"
+            className="MuiSvgIcon-root-27"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+            />
+          </svg>
+          <input
+            checked={false}
+            className="MuiPrivateSwitchBase-input-17"
+            onChange={[Function]}
+            type="radio"
+            value="2"
+          />
+        </span>
+        <span
+          className="MuiTouchRipple-root-131"
+        />
+      </span>
+      <span
+        className="MuiTypography-root-36 MuiTypography-body1-45 MuiFormControlLabel-label-8"
+      >
+        Import from file
+      </span>
+    </label>
+  </div>,
+  <div
+    className="MuiFormControl-root-72 MuiFormControl-marginDense-74 MuiFormControl-fullWidth-75"
+    onKeyDown={[Function]}
+  >
+    <label
+      className="MuiFormLabel-root-87 MuiInputLabel-root-76 MuiInputLabel-formControl-81 MuiInputLabel-animated-84 MuiInputLabel-marginDense-82 MuiInputLabel-outlined-86"
+      data-shrink={false}
+      htmlFor="directInputForm"
+    >
+      Gene name
+    </label>
+    <div
+      className="MuiInputBase-root-107 MuiOutlinedInput-root-94 MuiInputBase-fullWidth-116 MuiInputBase-formControl-108 MuiInputBase-marginDense-114 MuiInputBase-adornedEnd-112 MuiOutlinedInput-adornedEnd-98"
+      onClick={[Function]}
+    >
+      <fieldset
+        aria-hidden={true}
+        className="MuiPrivateNotchedOutline-root-124 MuiOutlinedInput-notchedOutline-101"
+        style={
+          Object {
+            "paddingLeft": 8,
+          }
+        }
+      >
+        <legend
+          className="MuiPrivateNotchedOutline-legend-125"
+          style={
+            Object {
+              "width": 0.01,
+            }
+          }
         >
           <span
-            className="ant-form-item-children"
-          >
-            <span
-              className="ant-input-affix-wrapper"
-            >
-              <input
-                className="ant-input"
-                data-__field={
-                  Object {
-                    "name": "gene",
-                  }
-                }
-                data-__meta={
-                  Object {
-                    "name": "gene",
-                    "originalProps": Object {
-                      "disabled": false,
-                      "onChange": [Function],
-                      "onPressEnter": [Function],
-                      "placeholder": "Input gene name and hit enter",
-                      "prefixCls": "ant-input",
-                      "suffix": <Icon
-                        type="enter"
-                      />,
-                      "type": "text",
-                    },
-                    "ref": null,
-                    "rules": Array [
-                      Object {
-                        "message": "Please input gene name!",
-                        "required": true,
-                      },
-                      Object {
-                        "validator": [Function],
-                      },
-                    ],
-                    "trigger": "onChange",
-                    "validate": Array [
-                      Object {
-                        "rules": Array [
-                          Object {
-                            "message": "Please input gene name!",
-                            "required": true,
-                          },
-                          Object {
-                            "validator": [Function],
-                          },
-                        ],
-                        "trigger": Array [
-                          "onChange",
-                        ],
-                      },
-                    ],
-                    "valuePropName": "value",
-                  }
-                }
-                disabled={false}
-                id="gene"
-                onChange={[Function]}
-                onKeyDown={[Function]}
-                placeholder="Input gene name and hit enter"
-                style={null}
-                type="text"
-                value=""
-              />
-              <span
-                className="ant-input-suffix"
-              >
-                <i
-                  className="anticon anticon-enter"
-                >
-                  <svg
-                    aria-hidden="true"
-                    className=""
-                    data-icon="enter"
-                    fill="currentColor"
-                    height="1em"
-                    viewBox="64 64 896 896"
-                    width="1em"
-                  >
-                    <path
-                      d="M864 170h-60c-4.4 0-8 3.6-8 8v518H310v-73c0-6.7-7.8-10.5-13-6.3l-141.9 112a8 8 0 0 0 0 12.6l141.9 112c5.3 4.2 13 .4 13-6.3v-75h498c35.3 0 64-28.7 64-64V178c0-4.4-3.6-8-8-8z"
-                    />
-                  </svg>
-                </i>
-              </span>
-            </span>
-          </span>
-        </div>
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "&#8203;",
+              }
+            }
+          />
+        </legend>
+      </fieldset>
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-117 MuiOutlinedInput-input-102 MuiInputBase-inputMarginDense-118 MuiOutlinedInput-inputMarginDense-103 MuiInputBase-inputAdornedEnd-123 MuiOutlinedInput-inputAdornedEnd-106"
+        disabled={false}
+        id="directInputForm"
+        name="gene"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="Input gene name and hit enter"
+        required={false}
+        type="text"
+        value=""
+      />
+      <div
+        className="MuiInputAdornment-root-126 MuiInputAdornment-positionStart-128"
+      >
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-27"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+          />
+          <path
+            d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"
+          />
+        </svg>
       </div>
     </div>
-  </form>,
+  </div>,
   <div
     style={
       Object {
@@ -212,26 +201,25 @@ Array [
     <h4
       style={
         Object {
-          "color": "#82909d",
+          "color": "#000",
           "marginBottom": "5px",
         }
       }
     >
-       
-      Selected genes
+      Selected genes:
     </h4>
     <div
-      className="ant-alert ant-alert-warning ant-alert-with-description ant-alert-no-icon"
-      data-show={true}
+      id="noGenesAlert"
+      style={
+        Object {
+          "backgroundColor": "#FFFBE5",
+          "border": "solid 1px #ffe7bc",
+          "borderRadius": "3px",
+          "padding": "15px",
+        }
+      }
     >
-      <span
-        className="ant-alert-message"
-      />
-      <span
-        className="ant-alert-description"
-      >
-        The genes you input appear here. You may input gene names directly or import them from file.
-      </span>
+      The genes you input appear here. You may input gene names directly or import them from file.
     </div>
   </div>,
 ]

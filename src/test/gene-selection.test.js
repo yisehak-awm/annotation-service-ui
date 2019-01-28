@@ -19,11 +19,11 @@ describe("<GeneSelectionForm />", () => {
 
   it("shows an alert message for empty gene list", () => {
     const wrapper = mount(<GeneSelectionForm genes={[]} />);
-    expect(wrapper.find("Alert#noGenesAlert").exists()).toBeTruthy();
+    expect(wrapper.find("div#noGenesAlert").exists()).toBeTruthy();
   });
 
   it("renders a list item for each inserted gene", () => {
     const wrapper = mount(<GeneSelectionForm genes={["G1", "G2", "G3"]} />);
-    expect(wrapper.find("Tag").length).toEqual(3);
+    expect(wrapper.find("Chip").length).toEqual(3);
   });
 });

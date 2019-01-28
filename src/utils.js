@@ -1,9 +1,9 @@
 import React from "react";
 import { Snackbar, SnackbarContent, CircularProgress } from "@material-ui/core";
-import styled from "styled-components";
+import { withStyles } from "@material-ui/core/styles";
+import red from "@material-ui/core/colors/red";
 
-export const SERVER_ADDRESS =
-  process.env.REACT_APP_SERVICE_ADDR || "http://localhost:5000";
+export const SERVER_ADDRESS = "http://46.4.115.181:3100";
 
 export const checkDuplicate = (value, array) => {
   return array.includes(value)
@@ -14,10 +14,10 @@ export const checkDuplicate = (value, array) => {
     : null;
 };
 
-const ErrorSnackbarContent = styled(SnackbarContent)`
-  background: #d13232 !important;
-  color: white;
-`;
+const ErrorSnackbarContent = withStyles({
+  root: { background: red[600] },
+  message: { color: "#fff" }
+})(SnackbarContent);
 
 export const showNotification = ({ message, busy }, callBack) => {
   return (
@@ -28,7 +28,7 @@ export const showNotification = ({ message, busy }, callBack) => {
       }}
       style={{ margin: "15px" }}
       open
-      autoHideDuration={busy ? null : 5}
+      autoHideDuration={busy ? null : 5000}
       onClose={callBack}
     >
       {busy ? (

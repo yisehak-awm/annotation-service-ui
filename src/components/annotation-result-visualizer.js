@@ -19,7 +19,8 @@ import {
   FileCopyOutlined,
   HelpOutline,
   Share,
-  ExpandMore
+  ExpandMore,
+  ChangeHistory
 } from "@material-ui/icons";
 import { showNotification } from "../utils";
 
@@ -47,17 +48,18 @@ export class AnnotationResultVisualizer extends React.Component {
       selectedNode: { node: null, position: null },
       history: []
     };
-
     this.cy_wrapper = React.createRef();
     cytoscape.use(cola);
-    // cytoscape.use(coseBilkent);
   }
 
-  changeLayout() {
-    this.layout = !this.props.minimalMode
-      ? this.cy.layout(CYTOSCAPE_COLA_CONFIG)
-      : this.cy.layout({ name: "cose" });
-    // this.layout = this.cy.layout(defaultOptions);
+  randomLayout() {
+    this.layout = this.cy.layout(CYTOSCAPE_COLA_CONFIG);
+    this.layout.run();
+  }
+
+  breadthFirstLayout() {
+    if (this.layout) this.layout.stop();
+    this.layout = this.cy.layout({ name: "breadthfirst" });
     this.layout.run();
   }
 
@@ -70,7 +72,6 @@ export class AnnotationResultVisualizer extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.graph);
     this.cy = cytoscape({
       container: this.cy_wrapper.current,
       hideEdgesOnViewport: true
@@ -79,20 +80,15 @@ export class AnnotationResultVisualizer extends React.Component {
       this.props.graph.nodes.filter(n => n.data.group === "main" && n.data.id)
     );
     this.toggleAnnotationVisibility(this.props.annotations[0], true);
-    this.cy.style(
-      !this.props.minimalMode
-        ? CYTOSCAPE_STYLE.concat(this.assignColorToAnnotations())
-        : CYTOSCAPE_STYLE
-    );
+    this.cy.style(CYTOSCAPE_STYLE.concat(this.assignColorToAnnotations()));
     this.registerEventListeners();
-    this.changeLayout();
+    this.randomLayout();
   }
 
   registerEventListeners() {
     this.cy.nodes().on(
       "mouseover",
       function(event) {
-        console.log(event);
         this.setState({
           selectedNode: {
             node: event.target.data(),
@@ -133,7 +129,8 @@ export class AnnotationResultVisualizer extends React.Component {
         selector: 'edge[group="' + ann + '"]',
         style: {
           "line-color": AnnotationColorsLight[i],
-          "text-outline-color": AnnotationColorsLight[i]
+          "text-outline-color": AnnotationColorsLight[i],
+          "target-arrow-color": AnnotationColorsDark[i]
         }
       });
       acc.push({
@@ -185,7 +182,7 @@ export class AnnotationResultVisualizer extends React.Component {
           );
         })
       : this.cy.remove(`[group='${annotation}']`);
-    this.changeLayout();
+    this.randomLayout();
     this.registerEventListeners();
   }
 
@@ -196,6 +193,20 @@ export class AnnotationResultVisualizer extends React.Component {
           .length) /
       this.props.graph.edges.length
     );
+  }
+
+  formatDescription(description) {
+    if (
+      description.indexOf("https://") > -1 ||
+      description.indexOf("http://") > -1
+    ) {
+      return (
+        <a href={description} rel="noopener noreferrer" target="_blank">
+          Learn more
+        </a>
+      );
+    }
+    return description;
   }
 
   render() {
@@ -231,9 +242,14 @@ export class AnnotationResultVisualizer extends React.Component {
               }}
               size="large"
             >
-              <Tooltip placement="right" title="Change layout">
-                <IconButton onClick={e => this.changeLayout()}>
+              <Tooltip placement="right" title="Randomize layout">
+                <IconButton onClick={e => this.randomLayout()}>
                   <Shuffle />
+                </IconButton>
+              </Tooltip>
+              <Tooltip placement="right" title="Breadth-first layout">
+                <IconButton onClick={e => this.breadthFirstLayout()}>
+                  <ChangeHistory />
                 </IconButton>
               </Tooltip>
               <Tooltip placement="right" title="Save screenshot">
@@ -358,7 +374,9 @@ export class AnnotationResultVisualizer extends React.Component {
             <h4>{`${this.state.selectedNode.node.name} ( ${
               this.state.selectedNode.node.id
             } )`}</h4>
-            <p>{this.state.selectedNode.node.definition}</p>
+            <p>
+              {this.formatDescription(this.state.selectedNode.node.definition)}
+            </p>
           </div>
         )}
       </div>

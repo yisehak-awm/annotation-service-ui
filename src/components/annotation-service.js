@@ -1,7 +1,4 @@
-import {
-  MAXIMUM_GRAPH_SIZE,
-  MINIMAL_MODE_THRESHOLD
-} from "../visualizer.config";
+import { MAXIMUM_GRAPH_SIZE } from "../visualizer.config";
 import React from "react";
 import { SERVER_ADDRESS, showNotification } from "../utils";
 import { Annotate } from "../proto/annotation_pb_service";
@@ -14,10 +11,9 @@ import {
 import { grpc } from "grpc-web-client";
 import { GeneSelectionForm } from "./gene-selection";
 import { AnnotationSelection } from "./annotation-selection";
-import { Row, message } from "antd";
 import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
 import { AnnotationResultDownload } from "./annotation-result-download";
-import { Divider, Button } from "@material-ui/core";
+import { Divider, Button, Grid } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
 
 export class AnnotationService extends React.Component {
@@ -51,7 +47,6 @@ export class AnnotationService extends React.Component {
           .toUpperCase()
           .split(" ")
       ].filter((g, i, arr) => arr.indexOf(g) === i);
-      console.log(genes);
       return { genes: genes };
     });
   }
@@ -69,7 +64,12 @@ export class AnnotationService extends React.Component {
     fileReader.onload = () => {
       const re = /^[a-z0-9\s]+$/i;
       if (!re.test(fileReader.result)) {
-        message.error("The selected file contains invalid characters.");
+        this.setState({
+          notification: {
+            message: "The selected file contains invalid characters.",
+            busy: false
+          }
+        });
         return;
       }
       const geneArray = fileReader.result.split("\n");
@@ -115,10 +115,6 @@ export class AnnotationService extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    console.log("Annotations", this.state.selectedAnnotations);
-  }
-
   isFormValid() {
     let valid = true;
     valid = valid && this.state.selectedAnnotations.length;
@@ -129,14 +125,11 @@ export class AnnotationService extends React.Component {
       a => a.name === "gene_go_annotation"
     );
     if (GO) valid = valid && GO.filter.namespace.length;
-    // If Gene Pathway annotation is selected, namespace must be defined and either protiens or small molecules should be included in the result
+    // If Gene Pathway annotation is selected, namespace must be defined
     const Pathway = this.state.selectedAnnotations.find(
       a => a.name === "gene_pathway_annotation"
     );
     if (Pathway) {
-      valid =
-        valid &&
-        (Pathway.filter.include_prot || Pathway.filter.include_small_molecule);
       valid =
         valid &&
         (Pathway.filter.namespace.includes("smpdb") ||
@@ -205,12 +198,12 @@ export class AnnotationService extends React.Component {
       onMessage: message => {
         if (!result) {
           result = { graph: JSON.parse(message.array[0]), schemeFile: "" };
+          console.log(JSON.stringify(result.graph));
         } else {
           result.schemeFile += message.array[0];
         }
       },
       onEnd: (status, statusMessage, trailers) => {
-        console.log(statusMessage);
         if (status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
@@ -266,18 +259,20 @@ export class AnnotationService extends React.Component {
               availableAnnotations={this.props.availableAnnotations}
             />
             <Divider style={{ margin: "15px 0" }} />
-            <Row type="flex" justify="end">
-              <Button
-                id="submit"
-                variant="contained"
-                onClick={() => this.handleSubmit()}
-                disabled={!this.isFormValid()}
-                color="primary"
-              >
-                <Check />
-                Submit
-              </Button>
-            </Row>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Button
+                  id="submitButton"
+                  variant="contained"
+                  onClick={() => this.handleSubmit()}
+                  disabled={!this.isFormValid()}
+                  color="primary"
+                >
+                  <Check />
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
           </div>
         )}
         {this.state.annotationResult ? (
@@ -288,11 +283,6 @@ export class AnnotationService extends React.Component {
               annotations={this.state.selectedAnnotations.map(a => a.name)}
               graph={this.state.annotationResult.graph}
               downloadSchemeFile={this.downloadSchemeFile}
-              minimalMode={
-                this.state.annotationResult.graph.nodes.length +
-                  this.state.annotationResult.graph.edges.length >
-                MINIMAL_MODE_THRESHOLD
-              }
             />
           ) : (
             <AnnotationResultDownload

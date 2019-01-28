@@ -1,9 +1,9 @@
-import "../node_modules/antd/dist/antd.min.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import { AnnotationService } from "./components/annotation-service";
 import { GOFilter } from "./components/go-filter";
 import { GenePathwayFilter } from "./components/gene-pathway-filter";
+import "./style.css";
 
 const availableAnnotations = [
   {
@@ -28,7 +28,7 @@ const availableAnnotations = [
     defaults: {
       namespace: ["smpdb"],
       include_prot: false,
-      include_small_molecule: false
+      include_small_molecule: true
     },
     fitlerForm: (defaults, handleFilterChanged) => (
       <GenePathwayFilter

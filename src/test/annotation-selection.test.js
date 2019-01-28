@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow, configure } from "enzyme";
+import { shallow, configure, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { AnnotationSelection } from "../components/annotation-selection";
 import renderer from "react-test-renderer";
@@ -8,20 +8,9 @@ configure({ adapter: new Adapter() });
 
 const availableAnnotations = [
   {
-    key: "GO",
-    name: "Gene-GO",
-    defaults: {
-      parents: 8,
-      namespace: [
-        "biological_process",
-        "cellular_component",
-        "molecular_function"
-      ],
-      get_entrez_id: false
-    },
-    fitlerForm: (defaults, handleFilterChanged) => (
-      <GOFilter defaults={defaults} handleFilterChanged={handleFilterChanged} />
-    )
+    key: "test",
+    name: "test",
+    fitlerForm: (defaults, handleFilterChanged) => null
   }
 ];
 
@@ -39,10 +28,11 @@ describe("<AnnotationSelection />", () => {
   });
 
   it("renders a checkbox for each selected annotation", () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <AnnotationSelection
         availableAnnotations={availableAnnotations}
-        selectedAnnotations={["a"]}
+        selectedAnnotations={[{ name: "test", filter: {} }]}
+        handleAnnotationsChanged={(selected, name) => null}
       />
     );
     expect(wrapper.find("Checkbox").length).toEqual(1);

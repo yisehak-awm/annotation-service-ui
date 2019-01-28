@@ -8,16 +8,10 @@ configure({ adapter: new Adapter() });
 
 const availableAnnotations = [
   {
-    key: "GO",
-    name: "Gene-GO",
+    key: "test",
+    name: "test",
     defaults: {
-      parents: 8,
-      namespace: [
-        "biological_process",
-        "cellular_component",
-        "molecular_function"
-      ],
-      get_entrez_id: false
+      param: 8
     },
     fitlerForm: (defaults, handleFilterChanged) => (
       <GOFilter defaults={defaults} handleFilterChanged={handleFilterChanged} />
@@ -34,17 +28,21 @@ describe("<AnnotationService />", () => {
   });
 
   it("renders a disabled submit button on mount", () => {
-    const wrapper = shallow(<AnnotationService />);
-    expect(wrapper.find("Button#submit[disabled=true]").exists()).toBeTruthy();
+    const wrapper = shallow(
+      <AnnotationService availableAnnotations={availableAnnotations} />
+    );
+    expect(wrapper.find("#submitButton").exists()).toBeTruthy();
   });
 
   it("enables submit button once genes and annotations are selected", () => {
-    const wrapper = shallow(<AnnotationService />);
-    expect(wrapper.find("Button#submit[disabled=true]").exists()).toBeTruthy();
+    const wrapper = shallow(
+      <AnnotationService availableAnnotations={availableAnnotations} />
+    );
+    expect(wrapper.find("#submitButton").exists()).toBeTruthy();
     wrapper.setState({
       selectedAnnotations: [{ name: "a", filter: {} }],
       genes: ["ACP1"]
     });
-    expect(wrapper.find("Button#submit[disabled=false]").exists()).toBeTruthy();
+    expect(wrapper.find("#submitButton").exists()).toBeTruthy();
   });
 });

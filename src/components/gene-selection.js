@@ -85,6 +85,7 @@ export class GeneSelectionForm extends React.Component {
         {this.state.inputMethod === InputMethods.DIRECT_INPUT && (
           <TextField
             {...this.state.validationErrors.gene}
+            id="directInputForm"
             label="Gene name"
             placeholder="Input gene name and hit enter"
             margin="dense"
@@ -175,8 +176,8 @@ export class GeneSelectionForm extends React.Component {
         )}
 
         <div style={{ marginTop: "10px" }}>
-          <h4 style={{ color: "#82909d", marginBottom: "5px" }}>
-            Selected genes
+          <h4 style={{ color: "#000", marginBottom: "5px" }}>
+            Selected genes:
             {this.props.genes.length ? (
               <Button
                 id="submit"

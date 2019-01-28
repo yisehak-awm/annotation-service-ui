@@ -55,6 +55,7 @@ export class GenePathwayFilter extends React.Component {
               <FormControlLabel
                 control={
                   <Switch
+                    defaultChecked={this.props.defaults.include_small_molecule}
                     onChange={e => {
                       this.props.handleFilterChanged({
                         include_small_molecule: e.target.checked
@@ -67,6 +68,7 @@ export class GenePathwayFilter extends React.Component {
               <FormControlLabel
                 control={
                   <Switch
+                    defaultChecked={this.props.defaults.include_prot}
                     onChange={e => {
                       this.props.handleFilterChanged({
                         include_prot: e.target.checked

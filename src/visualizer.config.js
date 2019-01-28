@@ -1,5 +1,4 @@
 export const MAXIMUM_GRAPH_SIZE = 1500;
-export const MINIMAL_MODE_THRESHOLD = 1500;
 
 export const CYTOSCAPE_COLA_CONFIG = {
   name: "cola",
@@ -98,6 +97,14 @@ export const CYTOSCAPE_STYLE = [
       // "text-rotation": "autorotate",
       // "text-outline-width": 1,
       // "text-outline-color": "#fff"
+    }
+  },
+  {
+    selector: "edge[group='gene_go_annotation']",
+    css: {
+      "curve-style": "straight",
+      "target-arrow-shape": "triangle",
+      "target-arrow-fill": "filled"
     }
   }
 ];
