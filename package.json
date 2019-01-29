@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "cytoscape": "^3.3.0",
     "cytoscape-cola": "^2.3.0",
+    "filesize": "^4.0.0",
     "google-protobuf": "^3.6.1",
     "grpc-web": "^1.0.3",
     "grpc-web-client": "^0.7.0",

@@ -12,6 +12,7 @@ import { CloudUpload, Check, Close, KeyboardReturn } from "@material-ui/icons";
 import Dropzone from "react-dropzone";
 import classNames from "classnames";
 import { checkDuplicate } from "../utils";
+import fileSize from "filesize";
 
 const InputMethods = {
   DIRECT_INPUT: "1",
@@ -172,8 +173,8 @@ export class GeneSelectionForm extends React.Component {
               >
                 {this.props.geneList.name +
                   " ( " +
-                  (this.props.geneList.size / 1000000).toPrecision(2) +
-                  " MB )"}
+                  fileSize(this.props.geneList.size) +
+                  " )"}
               </div>
             ) : null}
           </React.Fragment>

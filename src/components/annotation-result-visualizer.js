@@ -224,7 +224,6 @@ export class AnnotationResultVisualizer extends React.Component {
         <Grid container>
           <Grid
             item
-            cs={1}
             style={{
               position: "absolute",
               top: "15px",
@@ -238,7 +237,8 @@ export class AnnotationResultVisualizer extends React.Component {
                 display: "flex",
                 flexDirection: "column",
                 backgroundColor: "#fff",
-                borderRadius: "5px"
+                borderRadius: "5px",
+                opacity: 0.9
               }}
               size="large"
             >
@@ -301,14 +301,17 @@ export class AnnotationResultVisualizer extends React.Component {
           </Grid>
           <Grid
             item
-            xs={3}
+            xs={10}
+            sm={4}
+            md={3}
             style={{
               position: "absolute",
               top: "15px",
               right: "15px",
               backgroundColor: "#fff",
               borderRadius: "5px",
-              zIndex: 2
+              zIndex: 2,
+              opacity: 0.9
             }}
           >
             <ExpansionPanel style={{ width: "100%" }}>
