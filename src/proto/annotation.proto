@@ -19,10 +19,12 @@ message AnnotationRequest{
     repeated Gene genes = 2;
 }
 
+
 message AnnotationResponse{
-    string response = 1;
+    string graph = 1;
+    string scm = 2;
 }
 
 service Annotate{
-    rpc Annotate (AnnotationRequest) returns (stream AnnotationResponse);
+    rpc Annotate (AnnotationRequest) returns (AnnotationResponse);
 }

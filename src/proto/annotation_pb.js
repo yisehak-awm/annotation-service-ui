@@ -1,4 +1,4 @@
-/* eslint-disable */
+/*eslint-disable*/
 /**
  * @fileoverview
  * @enhanceable
@@ -757,7 +757,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.AnnotationResponse.toObject = function(includeInstance, msg) {
     var f,
       obj = {
-        response: jspb.Message.getFieldWithDefault(msg, 1, "")
+        graph: jspb.Message.getFieldWithDefault(msg, 1, ""),
+        scm: jspb.Message.getFieldWithDefault(msg, 2, "")
       };
 
     if (includeInstance) {
@@ -794,7 +795,11 @@ proto.AnnotationResponse.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
       case 1:
         var value = /** @type {string} */ (reader.readString());
-        msg.setResponse(value);
+        msg.setGraph(value);
+        break;
+      case 2:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setScm(value);
         break;
       default:
         reader.skipField();
@@ -822,23 +827,40 @@ proto.AnnotationResponse.prototype.serializeBinary = function() {
  */
 proto.AnnotationResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getResponse();
+  f = message.getGraph();
   if (f.length > 0) {
     writer.writeString(1, f);
+  }
+  f = message.getScm();
+  if (f.length > 0) {
+    writer.writeString(2, f);
   }
 };
 
 /**
- * optional string response = 1;
+ * optional string graph = 1;
  * @return {string}
  */
-proto.AnnotationResponse.prototype.getResponse = function() {
+proto.AnnotationResponse.prototype.getGraph = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 /** @param {string} value */
-proto.AnnotationResponse.prototype.setResponse = function(value) {
+proto.AnnotationResponse.prototype.setGraph = function(value) {
   jspb.Message.setField(this, 1, value);
+};
+
+/**
+ * optional string scm = 2;
+ * @return {string}
+ */
+proto.AnnotationResponse.prototype.getScm = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+/** @param {string} value */
+proto.AnnotationResponse.prototype.setScm = function(value) {
+  jspb.Message.setField(this, 2, value);
 };
 
 goog.object.extend(exports, proto);

@@ -318,7 +318,7 @@ export class AnnotationResultVisualizer extends React.Component {
               <ExpansionPanelDetails>
                 <FormGroup>
                   {this.props.annotations.map((a, i) => (
-                    <React.Fragment>
+                    <React.Fragment key={a}>
                       <FormControlLabel
                         value="0"
                         key={a}

@@ -46,11 +46,7 @@ const availableAnnotations = [
 
 class App extends React.Component {
   render() {
-    return (
-      <div>
-        <AnnotationService availableAnnotations={availableAnnotations} />
-      </div>
-    );
+    return <AnnotationService availableAnnotations={availableAnnotations} />;
   }
 }
 

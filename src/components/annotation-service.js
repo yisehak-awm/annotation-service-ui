@@ -13,7 +13,7 @@ import { GeneSelectionForm } from "./gene-selection";
 import { AnnotationSelection } from "./annotation-selection";
 import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
 import { AnnotationResultDownload } from "./annotation-result-download";
-import { Divider, Button, Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
 
 export class AnnotationService extends React.Component {
@@ -46,7 +46,7 @@ export class AnnotationService extends React.Component {
           .trim()
           .toUpperCase()
           .split(" ")
-      ].filter((g, i, arr) => arr.indexOf(g) === i);
+      ].filter((g, i, arr) => g && arr.indexOf(g) === i);
       return { genes: genes };
     });
   }
@@ -191,23 +191,17 @@ export class AnnotationService extends React.Component {
       notification: { message: "Fetching annotation results ...", busy: true }
     });
 
-    let result = null;
-    grpc.invoke(Annotate.Annotate, {
+    grpc.unary(Annotate.Annotate, {
       request: annotationResult,
       host: SERVER_ADDRESS,
-      onMessage: message => {
-        if (!result) {
-          result = { graph: JSON.parse(message.array[0]), schemeFile: "" };
-          console.log(JSON.stringify(result.graph));
-        } else {
-          result.schemeFile += message.array[0];
-        }
-      },
-      onEnd: (status, statusMessage, trailers) => {
+      onEnd: ({ status, statusMessage, message }) => {
         if (status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
-            annotationResult: result,
+            annotationResult: {
+              graph: JSON.parse(message.array[0]),
+              schemeFile: atob(message.array[1])
+            },
             notification: null
           }));
         } else {
@@ -237,7 +231,7 @@ export class AnnotationService extends React.Component {
     return (
       <React.Fragment>
         {!this.state.annotationResult && (
-          <div style={{ padding: "30px 150px" }}>
+          <div>
             {this.state.notification &&
               showNotification(this.state.notification, () => {
                 this.setState({ notification: null });
@@ -250,7 +244,7 @@ export class AnnotationService extends React.Component {
               onGeneListUploaded={this.handleGeneListUploaded}
               onAllGenesRemoved={this.handleAllGenesRemoved}
             />
-            <Divider style={{ margin: "15px 0" }} />
+            {/* <Divider style={{ margin: "15px 0" }} /> */}
 
             <AnnotationSelection
               handleAnnotationsChanged={this.handleAnnotationsChanged}
@@ -258,7 +252,7 @@ export class AnnotationService extends React.Component {
               selectedAnnotations={this.state.selectedAnnotations}
               availableAnnotations={this.props.availableAnnotations}
             />
-            <Divider style={{ margin: "15px 0" }} />
+            {/* <Divider style={{ margin: "15px 0" }} /> */}
             <Grid container justify="flex-end">
               <Grid item>
                 <Button

@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<AnnotationService /> renders correctly 1`] = `
-<div
-  style={
-    Object {
-      "padding": "30px 150px",
-    }
-  }
->
+<div>
   <div
     className="MuiFormGroup-root-1"
     defaultValue="1"
@@ -61,7 +55,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
           />
         </span>
         <span
-          className="MuiTouchRipple-root-265"
+          className="MuiTouchRipple-root-260"
         />
       </span>
       <span
@@ -111,7 +105,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
           />
         </span>
         <span
-          className="MuiTouchRipple-root-265"
+          className="MuiTouchRipple-root-260"
         />
       </span>
       <span
@@ -122,8 +116,13 @@ exports[`<AnnotationService /> renders correctly 1`] = `
     </label>
   </div>
   <div
-    className="MuiFormControl-root-72 MuiFormControl-marginDense-74 MuiFormControl-fullWidth-75"
+    className="MuiFormControl-root-72 MuiFormControl-marginDense-74"
     onKeyDown={[Function]}
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
   >
     <label
       className="MuiFormLabel-root-87 MuiInputLabel-root-76 MuiInputLabel-formControl-81 MuiInputLabel-animated-84 MuiInputLabel-marginDense-82 MuiInputLabel-outlined-86"
@@ -133,7 +132,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
       Gene name
     </label>
     <div
-      className="MuiInputBase-root-107 MuiOutlinedInput-root-94 MuiInputBase-fullWidth-116 MuiInputBase-formControl-108 MuiInputBase-marginDense-114 MuiInputBase-adornedEnd-112 MuiOutlinedInput-adornedEnd-98"
+      className="MuiInputBase-root-107 MuiOutlinedInput-root-94 MuiInputBase-formControl-108 MuiInputBase-marginDense-114 MuiInputBase-adornedEnd-112 MuiOutlinedInput-adornedEnd-98"
       onClick={[Function]}
     >
       <fieldset
@@ -178,6 +177,12 @@ exports[`<AnnotationService /> renders correctly 1`] = `
       />
       <div
         className="MuiInputAdornment-root-126 MuiInputAdornment-positionStart-128"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         <svg
           aria-hidden="true"
@@ -228,14 +233,6 @@ exports[`<AnnotationService /> renders correctly 1`] = `
       The genes you input appear here. You may input gene names directly or import them from file.
     </div>
   </div>
-  <hr
-    className="MuiDivider-root-131"
-    style={
-      Object {
-        "margin": "15px 0",
-      }
-    }
-  />
   <h4>
     Annotations: 
   </h4>
@@ -243,7 +240,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
     className="MuiFormControlLabel-root-3"
   >
     <span
-      className="MuiButtonBase-root-24 MuiIconButton-root-18 MuiPrivateSwitchBase-root-14 MuiCheckbox-root-136 MuiCheckbox-colorSecondary-141"
+      className="MuiButtonBase-root-24 MuiIconButton-root-18 MuiPrivateSwitchBase-root-14 MuiCheckbox-root-131 MuiCheckbox-colorSecondary-136"
       onBlur={[Function]}
       onContextMenu={[Function]}
       onFocus={[Function]}
@@ -281,7 +278,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
         />
       </span>
       <span
-        className="MuiTouchRipple-root-265"
+        className="MuiTouchRipple-root-260"
       />
     </span>
     <span
@@ -291,22 +288,14 @@ exports[`<AnnotationService /> renders correctly 1`] = `
     </span>
   </label>
   <br />
-  <hr
-    className="MuiDivider-root-131"
-    style={
-      Object {
-        "margin": "15px 0",
-      }
-    }
-  />
   <div
-    className="MuiGrid-container-142 MuiGrid-justify-xs-flex-end-160"
+    className="MuiGrid-container-137 MuiGrid-justify-xs-flex-end-155"
   >
     <div
-      className="MuiGrid-item-143"
+      className="MuiGrid-item-138"
     >
       <button
-        className="MuiButtonBase-root-24 MuiButtonBase-disabled-25 MuiButton-root-239 MuiButton-contained-250 MuiButton-containedPrimary-251 MuiButton-raised-253 MuiButton-raisedPrimary-254 MuiButton-disabled-259"
+        className="MuiButtonBase-root-24 MuiButtonBase-disabled-25 MuiButton-root-234 MuiButton-contained-245 MuiButton-containedPrimary-246 MuiButton-raised-248 MuiButton-raisedPrimary-249 MuiButton-disabled-254"
         disabled={true}
         id="submitButton"
         onBlur={[Function]}
@@ -325,7 +314,7 @@ exports[`<AnnotationService /> renders correctly 1`] = `
         type="button"
       >
         <span
-          className="MuiButton-label-240"
+          className="MuiButton-label-235"
         >
           <svg
             aria-hidden="true"

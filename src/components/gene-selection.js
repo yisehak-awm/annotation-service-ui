@@ -85,13 +85,13 @@ export class GeneSelectionForm extends React.Component {
         {this.state.inputMethod === InputMethods.DIRECT_INPUT && (
           <TextField
             {...this.state.validationErrors.gene}
+            style={{ width: "100%" }}
             id="directInputForm"
             label="Gene name"
             placeholder="Input gene name and hit enter"
             margin="dense"
             variant="outlined"
             name="gene"
-            fullWidth
             value={this.state.currentGeneName}
             onChange={e => {
               let validationErrors = Object.assign(
@@ -104,13 +104,17 @@ export class GeneSelectionForm extends React.Component {
               );
               this.setState({
                 validationErrors: validationErrors,
-                currentGeneName: e.target.value.trim()
+                currentGeneName: e.target.value
               });
             }}
             onKeyDown={e => (e.key === "Enter" ? this.handleGeneAdded() : null)}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment
+                  style={{ cursor: "pointer" }}
+                  position="start"
+                  onClick={e => this.handleGeneAdded()}
+                >
                   <KeyboardReturn />
                 </InputAdornment>
               )

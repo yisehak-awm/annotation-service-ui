@@ -116,8 +116,13 @@ Array [
     </label>
   </div>,
   <div
-    className="MuiFormControl-root-72 MuiFormControl-marginDense-74 MuiFormControl-fullWidth-75"
+    className="MuiFormControl-root-72 MuiFormControl-marginDense-74"
     onKeyDown={[Function]}
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
   >
     <label
       className="MuiFormLabel-root-87 MuiInputLabel-root-76 MuiInputLabel-formControl-81 MuiInputLabel-animated-84 MuiInputLabel-marginDense-82 MuiInputLabel-outlined-86"
@@ -127,7 +132,7 @@ Array [
       Gene name
     </label>
     <div
-      className="MuiInputBase-root-107 MuiOutlinedInput-root-94 MuiInputBase-fullWidth-116 MuiInputBase-formControl-108 MuiInputBase-marginDense-114 MuiInputBase-adornedEnd-112 MuiOutlinedInput-adornedEnd-98"
+      className="MuiInputBase-root-107 MuiOutlinedInput-root-94 MuiInputBase-formControl-108 MuiInputBase-marginDense-114 MuiInputBase-adornedEnd-112 MuiOutlinedInput-adornedEnd-98"
       onClick={[Function]}
     >
       <fieldset
@@ -172,6 +177,12 @@ Array [
       />
       <div
         className="MuiInputAdornment-root-126 MuiInputAdornment-positionStart-128"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         <svg
           aria-hidden="true"
