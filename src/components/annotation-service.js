@@ -205,12 +205,14 @@ export class AnnotationService extends React.Component {
             notification: null
           }));
         } else {
-          if (statusMessage.includes("Gene Does't exist")) {
+          console.log("status", statusMessage);
+          if (statusMessage.includes("Gene Doesn't exist")) {
             const invalidGenes = statusMessage
               .split("`")[1]
               .split(",")
               .map(g => g.trim())
               .filter(g => g);
+            console.log("invlaid", invalidGenes);
             this.setState(state => ({
               busy: false,
               genes: state.genes.filter(g => !invalidGenes.includes(g)),
