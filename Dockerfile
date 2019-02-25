@@ -4,9 +4,6 @@ MAINTAINER Enku Wendowsen <enku.wende@gmail.com>
 #Run apt-get in NONINTERACTIVE mode
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG SERVER_ADDR
-ENV SERVICE_ADDR $SERVER_ADDR
-
 # replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
