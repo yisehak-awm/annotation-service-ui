@@ -198,10 +198,7 @@ export class AnnotationService extends React.Component {
         if (status === grpc.Code.OK) {
           this.setState(state => ({
             busy: false,
-            annotationResult: {
-              graph: JSON.parse(message.array[0]),
-              schemeFile: atob(message.array[1])
-            },
+            annotationResult: message.array[0],
             notification: null
           }));
         } else {
@@ -272,19 +269,13 @@ export class AnnotationService extends React.Component {
           </div>
         )}
         {this.state.annotationResult ? (
-          this.state.annotationResult.graph.nodes.length <
-          MAXIMUM_GRAPH_SIZE ? (
-            <AnnotationResultVisualizer
-              notification={this.state.notification}
-              annotations={this.state.selectedAnnotations.map(a => a.name)}
-              graph={this.state.annotationResult.graph}
-              downloadSchemeFile={this.downloadSchemeFile}
-            />
-          ) : (
-            <AnnotationResultDownload
-              downloadSchemeFile={this.downloadSchemeFile}
-            />
-          )
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+            href={this.state.annotationResult}
+          >
+            {this.state.annotationResult}
+          </a>
         ) : null}
       </React.Fragment>
     );

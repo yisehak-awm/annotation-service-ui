@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/* eslint-disable */
 /**
  * @fileoverview
  * @enhanceable
@@ -223,7 +223,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.Annotation.toObject = function(includeInstance, msg) {
     var f,
       obj = {
-        functionName: jspb.Message.getFieldWithDefault(msg, 1, ""),
+        functionname: jspb.Message.getFieldWithDefault(msg, 1, ""),
         filtersList: jspb.Message.toObjectList(
           msg.getFiltersList(),
           proto.Filter.toObject,
@@ -265,7 +265,7 @@ proto.Annotation.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
       case 1:
         var value = /** @type {string} */ (reader.readString());
-        msg.setFunctionName(value);
+        msg.setFunctionname(value);
         break;
       case 2:
         var value = new proto.Filter();
@@ -298,7 +298,7 @@ proto.Annotation.prototype.serializeBinary = function() {
  */
 proto.Annotation.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getFunctionName();
+  f = message.getFunctionname();
   if (f.length > 0) {
     writer.writeString(1, f);
   }
@@ -309,15 +309,15 @@ proto.Annotation.serializeBinaryToWriter = function(message, writer) {
 };
 
 /**
- * optional string function_name = 1;
+ * optional string functionName = 1;
  * @return {string}
  */
-proto.Annotation.prototype.getFunctionName = function() {
+proto.Annotation.prototype.getFunctionname = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 /** @param {string} value */
-proto.Annotation.prototype.setFunctionName = function(value) {
+proto.Annotation.prototype.setFunctionname = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
@@ -403,7 +403,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.Gene.toObject = function(includeInstance, msg) {
     var f,
       obj = {
-        geneName: jspb.Message.getFieldWithDefault(msg, 1, "")
+        genename: jspb.Message.getFieldWithDefault(msg, 1, "")
       };
 
     if (includeInstance) {
@@ -440,7 +440,7 @@ proto.Gene.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
       case 1:
         var value = /** @type {string} */ (reader.readString());
-        msg.setGeneName(value);
+        msg.setGenename(value);
         break;
       default:
         reader.skipField();
@@ -468,22 +468,22 @@ proto.Gene.prototype.serializeBinary = function() {
  */
 proto.Gene.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getGeneName();
+  f = message.getGenename();
   if (f.length > 0) {
     writer.writeString(1, f);
   }
 };
 
 /**
- * optional string gene_name = 1;
+ * optional string geneName = 1;
  * @return {string}
  */
-proto.Gene.prototype.getGeneName = function() {
+proto.Gene.prototype.getGenename = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 /** @param {string} value */
-proto.Gene.prototype.setGeneName = function(value) {
+proto.Gene.prototype.setGenename = function(value) {
   jspb.Message.setField(this, 1, value);
 };
 
@@ -757,8 +757,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.AnnotationResponse.toObject = function(includeInstance, msg) {
     var f,
       obj = {
-        graph: jspb.Message.getFieldWithDefault(msg, 1, ""),
-        scm: jspb.Message.getFieldWithDefault(msg, 2, "")
+        result: jspb.Message.getFieldWithDefault(msg, 1, "")
       };
 
     if (includeInstance) {
@@ -795,11 +794,7 @@ proto.AnnotationResponse.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
       case 1:
         var value = /** @type {string} */ (reader.readString());
-        msg.setGraph(value);
-        break;
-      case 2:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setScm(value);
+        msg.setResult(value);
         break;
       default:
         reader.skipField();
@@ -827,40 +822,23 @@ proto.AnnotationResponse.prototype.serializeBinary = function() {
  */
 proto.AnnotationResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getGraph();
+  f = message.getResult();
   if (f.length > 0) {
     writer.writeString(1, f);
-  }
-  f = message.getScm();
-  if (f.length > 0) {
-    writer.writeString(2, f);
   }
 };
 
 /**
- * optional string graph = 1;
+ * optional string result = 1;
  * @return {string}
  */
-proto.AnnotationResponse.prototype.getGraph = function() {
+proto.AnnotationResponse.prototype.getResult = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 /** @param {string} value */
-proto.AnnotationResponse.prototype.setGraph = function(value) {
+proto.AnnotationResponse.prototype.setResult = function(value) {
   jspb.Message.setField(this, 1, value);
-};
-
-/**
- * optional string scm = 2;
- * @return {string}
- */
-proto.AnnotationResponse.prototype.getScm = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-/** @param {string} value */
-proto.AnnotationResponse.prototype.setScm = function(value) {
-  jspb.Message.setField(this, 2, value);
 };
 
 goog.object.extend(exports, proto);
