@@ -157,14 +157,14 @@ export class AnnotationService extends React.Component {
     annotationResult.setGenesList(
       this.state.genes.map(g => {
         const gene = new Gene();
-        gene.setGeneName(g);
+        gene.setGenename(g);
         return gene;
       })
     );
     annotationResult.setAnnotationsList(
       this.state.selectedAnnotations.map(sa => {
         const annotation = new Annotation();
-        annotation.setFunctionName(sa.name);
+        annotation.setFunctionname(sa.name);
         annotation.setFiltersList(
           sa.filter
             ? Object.keys(sa.filter).map(k => {
