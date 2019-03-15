@@ -1,4 +1,3 @@
-import { MAXIMUM_GRAPH_SIZE } from "../visualizer.config";
 import React from "react";
 import { SERVER_ADDRESS, showNotification } from "../utils";
 import { Annotate } from "../proto/annotation_pb_service";
@@ -11,10 +10,8 @@ import {
 import { grpc } from "grpc-web-client";
 import { GeneSelectionForm } from "./gene-selection";
 import { AnnotationSelection } from "./annotation-selection";
-import { AnnotationResultVisualizer } from "./annotation-result-visualizer";
-import { AnnotationResultDownload } from "./annotation-result-download";
 import { Button, Grid } from "@material-ui/core";
-import { Check } from "@material-ui/icons";
+import { Check, CheckCircle } from "@material-ui/icons";
 
 export class AnnotationService extends React.Component {
   constructor(props) {
@@ -119,7 +116,6 @@ export class AnnotationService extends React.Component {
     let valid = true;
     valid = valid && this.state.selectedAnnotations.length;
     valid = valid && this.state.genes.length;
-
     // If Gene GO annotation is selected, namespace must be defined
     const GO = this.state.selectedAnnotations.find(
       a => a.name === "gene_go_annotation"
@@ -202,14 +198,12 @@ export class AnnotationService extends React.Component {
             notification: null
           }));
         } else {
-          console.log("status", statusMessage);
           if (statusMessage.includes("Gene Doesn't exist")) {
             const invalidGenes = statusMessage
               .split("`")[1]
               .split(",")
               .map(g => g.trim())
               .filter(g => g);
-            console.log("invlaid", invalidGenes);
             this.setState(state => ({
               busy: false,
               genes: state.genes.filter(g => !invalidGenes.includes(g)),
@@ -243,15 +237,12 @@ export class AnnotationService extends React.Component {
               onGeneListUploaded={this.handleGeneListUploaded}
               onAllGenesRemoved={this.handleAllGenesRemoved}
             />
-            {/* <Divider style={{ margin: "15px 0" }} /> */}
-
             <AnnotationSelection
               handleAnnotationsChanged={this.handleAnnotationsChanged}
               handleFilterChanged={this.handleFilterChanged}
               selectedAnnotations={this.state.selectedAnnotations}
               availableAnnotations={this.props.availableAnnotations}
             />
-            {/* <Divider style={{ margin: "15px 0" }} /> */}
             <Grid container justify="flex-end">
               <Grid item>
                 <Button
@@ -269,13 +260,33 @@ export class AnnotationService extends React.Component {
           </div>
         )}
         {this.state.annotationResult ? (
-          <a
-            rel="noopener noreferrer"
-            target="_blank"
-            href={this.state.annotationResult}
-          >
-            {this.state.annotationResult}
-          </a>
+          <Grid container justify="center">
+            <Grid
+              item
+              style={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "60vh"
+              }}
+            >
+              <CheckCircle style={{ fontSize: "72px", color: "#54C21F" }} />
+              <h1 style={{ margin: 5 }}>Your request is being processed</h1>
+              <h3 style={{ marginTop: 0, color: "#555" }}>
+                Follow the link below to view results.
+              </h3>
+              <a
+                rel="noopener noreferrer"
+                target="_blank"
+                href={this.state.annotationResult}
+                style={{ fontSize: 18 }}
+              >
+                {this.state.annotationResult}
+              </a>
+            </Grid>
+          </Grid>
         ) : null}
       </React.Fragment>
     );

@@ -1,5 +1,3 @@
-export const MAXIMUM_GRAPH_SIZE = 1500;
-
 export const CYTOSCAPE_COLA_CONFIG = {
   name: "cola",
   animate: true,
