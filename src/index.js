@@ -25,9 +25,9 @@ const availableAnnotations = [
     key: "gene_pathway_annotation",
     name: "Gene pathway",
     defaults: {
-      namespace: ["smpdb"],
-      include_prot: false,
-      include_small_molecule: true
+      namespace: ["reactome"],
+      include_prot: true,
+      include_small_molecule: false
     },
     fitlerForm: (defaults, handleFilterChanged) => (
       <GenePathwayFilter
