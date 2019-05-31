@@ -5,9 +5,9 @@ import { GOFilter } from "./components/go-filter";
 import { GenePathwayFilter } from "./components/gene-pathway-filter";
 import "./style.css";
 
-const availableAnnotations = [
+var availableAnnotations = [
   {
-    key: "gene_go_annotation",
+    key: "gene-go-annotation",
     name: "Gene-GO",
     defaults: {
       namespace: [
@@ -22,7 +22,7 @@ const availableAnnotations = [
     )
   },
   {
-    key: "gene_pathway_annotation",
+    key: "gene-pathway-annotation",
     name: "Gene pathway",
     defaults: {
       namespace: ["reactome"],
@@ -37,15 +37,39 @@ const availableAnnotations = [
     )
   },
   {
-    key: "biogrid_interaction_annotation",
+    key: "biogrid-interaction-annotation",
     name: "Biogrid protein interaction",
-    fitlerForm: (defaults, handleFilterChanged) => null
+    fitlerForm: (defaults, handleFilterChanged) => null,
+    defaults: {
+      interaction: "genes"
+    }
   }
 ];
 
 class App extends React.Component {
+
+   constructor(props){
+     super(props);
+     this.state = {
+       annotations : availableAnnotations
+     };
+     this.handleInteractionUpdate = this.handleInteractionUpdate.bind(this)
+   }
+
+   handleInteractionUpdate(pathwaySelected) {
+      if(pathwaySelected){
+        availableAnnotations[2].defaults.interaction = "proteins"
+      }
+      else{
+        availableAnnotations = "genes"
+      }
+
+      this.setState({
+          annotations: availableAnnotations
+      })
+  }
   render() {
-    return <AnnotationService availableAnnotations={availableAnnotations} />;
+    return <AnnotationService availableAnnotations={this.state.annotations} handleInteractionUpdate={this.handleInteractionUpdate}/>;
   }
 }
 
