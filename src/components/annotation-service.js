@@ -85,16 +85,28 @@ export class AnnotationService extends React.Component {
   handleAnnotationsChanged(isSelected, annotation) {
     this.setState(state => {
       let selectedAnnotations = state.selectedAnnotations.slice();
-      isSelected
-        ? selectedAnnotations.push({
-            name: annotation,
-            filter: this.props.availableAnnotations.find(
-              a => a.key === annotation
-            ).defaults
-          })
-        : (selectedAnnotations = selectedAnnotations.filter(
-            a => a.name !== annotation
-          ));
+        if (isSelected) {
+            if(annotation === "biogrid-interaction-annotation" && selectedAnnotations.find(a => a.name === "gene-pathway-annotation")){
+                selectedAnnotations.push({
+                name: annotation,
+                filter: {
+                    "interaction": "proteins"
+                }
+            });
+            }
+            else{
+                selectedAnnotations.push({
+                name: annotation,
+                filter: this.props.availableAnnotations.find(
+                    a => a.key === annotation
+                ).defaults
+            });
+            }
+        } else {
+            selectedAnnotations = selectedAnnotations.filter(
+                a => a.name !== annotation
+            );
+        }
 
       return { selectedAnnotations: selectedAnnotations };
     });
@@ -118,12 +130,12 @@ export class AnnotationService extends React.Component {
     valid = valid && this.state.genes.length;
     // If Gene GO annotation is selected, namespace must be defined
     const GO = this.state.selectedAnnotations.find(
-      a => a.name === "gene_go_annotation"
+      a => a.name === "gene-go-annotation"
     );
     if (GO) valid = valid && GO.filter.namespace.length;
     // If Gene Pathway annotation is selected, namespace must be defined
     const Pathway = this.state.selectedAnnotations.find(
-      a => a.name === "gene_pathway_annotation"
+      a => a.name === "gene-pathway-annotation"
     );
     if (Pathway) {
       valid =

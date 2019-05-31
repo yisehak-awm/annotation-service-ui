@@ -32,7 +32,7 @@ export const CYTOSCAPE_STYLE = [
     }
   },
   {
-    selector: 'node[group="biogrid_interaction_annotation"]',
+    selector: 'node[group="biogrid-interaction-annotation"]',
     css: {
       shape: "ellipse",
       width: 75,
@@ -98,7 +98,7 @@ export const CYTOSCAPE_STYLE = [
     }
   },
   {
-    selector: "edge[group='gene_go_annotation']",
+    selector: "edge[group='gene-go-annotation']",
     css: {
       "curve-style": "straight",
       "target-arrow-shape": "triangle",
