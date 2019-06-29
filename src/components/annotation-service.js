@@ -86,13 +86,24 @@ export class AnnotationService extends React.Component {
     this.setState(state => {
       let selectedAnnotations = state.selectedAnnotations.slice();
         if (isSelected) {
-            if(annotation === "biogrid-interaction-annotation" && selectedAnnotations.find(a => a.name === "gene-pathway-annotation")){
-                selectedAnnotations.push({
-                name: annotation,
-                filter: {
-                    "interaction": "proteins"
+            if(annotation === "biogrid-interaction-annotation"){
+                var genePathway = selectedAnnotations.find(a => a.name === "gene-pathway-annotation");
+                if(genePathway.filter.include_prot){
+                     selectedAnnotations.push({
+                        name: annotation,
+                        filter: {
+                            "interaction": "proteins"
+                        }
+                      });
                 }
-            });
+                else {
+                  selectedAnnotations.push({
+                        name: annotation,
+                        filter: {
+                            "interaction": "genes"
+                        }
+                      });
+                }
             }
             else{
                 selectedAnnotations.push({
@@ -226,6 +237,7 @@ export class AnnotationService extends React.Component {
               busy: false,
               notification: { message: statusMessage, busy: false }
             }));
+            console.log(statusMessage);
           }
         }
       }
