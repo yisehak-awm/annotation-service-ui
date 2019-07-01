@@ -88,7 +88,7 @@ export class AnnotationService extends React.Component {
         if (isSelected) {
             if(annotation === "biogrid-interaction-annotation"){
                 var genePathway = selectedAnnotations.find(a => a.name === "gene-pathway-annotation");
-                if(genePathway.filter.include_prot){
+                if(genePathway && genePathway.filter.include_prot){
                      selectedAnnotations.push({
                         name: annotation,
                         filter: {
