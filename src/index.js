@@ -48,28 +48,8 @@ var availableAnnotations = [
 
 class App extends React.Component {
 
-   constructor(props){
-     super(props);
-     this.state = {
-       annotations : availableAnnotations
-     };
-     this.handleInteractionUpdate = this.handleInteractionUpdate.bind(this)
-   }
-
-   handleInteractionUpdate(pathwaySelected) {
-      if(pathwaySelected){
-        availableAnnotations[2].defaults.interaction = "proteins"
-      }
-      else{
-        availableAnnotations = "genes"
-      }
-
-      this.setState({
-          annotations: availableAnnotations
-      })
-  }
   render() {
-    return <AnnotationService availableAnnotations={this.state.annotations} handleInteractionUpdate={this.handleInteractionUpdate}/>;
+    return <AnnotationService availableAnnotations={availableAnnotations}/>;
   }
 }
 
