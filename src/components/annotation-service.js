@@ -147,8 +147,6 @@ export class AnnotationService extends React.Component {
 
             return {selectedAnnotations: selectedAnnotations};
         });
-
-        console.log(this.state.selectedAnnotations);
     }
 
     handleFilterChanged(annotation, filter) {
@@ -284,7 +282,6 @@ export class AnnotationService extends React.Component {
                             busy: false,
                             notification: {message: statusMessage, busy: false}
                         }));
-                        console.log(statusMessage);
                     }
                 }
             }
