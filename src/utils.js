@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import red from "@material-ui/core/colors/red";
 
 export const SERVER_ADDRESS = process.env.SERVICE_ADDR
-  ? `http://${process.env.SERVICE_ADDR}:3001`
+  ? process.env.SERVICE_ADDR
   : "http://localhost:3001";
 
 export const checkDuplicate = (value, array) => {
